@@ -8,17 +8,20 @@ icon: bullseye-arrow
 
 
 
-### 1. Connect your device to the Linxdot hotspot
+### 1. 將您的設備連接到 Linxdot 熱點
 
-&#x20;The default wireless network name (SSIDs) and password are SSID: "Linxdot-AP" and password: "linxdot1234"
+&#x20;預設的無線網路名稱（SSID）和密碼如下：
+
+SSID：「Linxdot-AP」\
+密碼：「linxdot1234」
 
 <div data-full-width="false"><figure><img src="../.gitbook/assets/截圖 2025-02-11 下午2.15.30.png" alt=""><figcaption></figcaption></figure></div>
 
-### 2. Launch a web browser,and enter http://10.100.100.1
+### 2. **開啟網頁瀏覽器，並輸入** `http://10.100.100.1`
 
-If you face the risk warming in browser, please choice take the risk to enter the setup page.&#x20;
+如果您的瀏覽器顯示風險警告，請選擇「接受風險並繼續」以進入設定頁面。&#x20;
 
 <figure><img src="../.gitbook/assets/截圖 2025-02-11 下午2.22.17.png" alt=""><figcaption></figcaption></figure>
 
-### 3. Now you could enter the setting page to setup the basic network parameter and the LoraWAN server also workable in the default IP: 10.100.100.1:8080
+### 3. **現在，您可以進入設定頁面來設定基本網路參數，並且 LoRaWAN 伺服器也已經在預設 IP** `10.100.100.1:8080` **上運作**
 
