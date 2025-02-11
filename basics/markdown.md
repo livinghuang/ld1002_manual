@@ -1,26 +1,21 @@
 ---
-icon: markdown
+icon: hand-point-right
 ---
 
-# Markdown
+# 設定 Hotspot 有線連接時使用固定IP
 
-GitBook supports many different types of content, and is backed by Markdown — meaning you can copy and paste any existing Markdown files directly into the editor!
+本章將引導您透過 **設定頁面**，將網路連線方式更改為 **固定 IP**。
 
-<figure><img src="https://gitbookio.github.io/onboarding-template-images/markdown-hero.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/截圖 2025-02-12 清晨7.21.09.png" alt=""><figcaption><p>Change DHCP To Static Fixed IP</p></figcaption></figure>
 
-Feel free to test it out and copy the Markdown below by hovering over the code block in the upper right, and pasting into a new line underneath.
+1. 在您的瀏覽器中進入 **設定頁面** 並選擇 **網路->介面**。 進入**WAN 介面編輯**修改。&#x20;
 
-```markdown
-# Heading
+<figure><img src="../.gitbook/assets/截圖 2025-02-12 清晨7.22.45.png" alt=""><figcaption></figcaption></figure>
 
-This is some paragraph text, with a [link](https://docs.gitbook.com) to our docs. 
+2. 然後，將 **DHCP** 更改為 **靜態固定 IP**，並設定 **固定 IP 資訊**。&#x20;
 
-## Heading 2
-- Point 1
-- Point 2
-- Point 3
-```
+<figure><img src="../.gitbook/assets/截圖 2025-02-12 清晨7.24.45.png" alt=""><figcaption></figcaption></figure>
 
-{% hint style="info" %}
-If you have multiple files, GitBook makes it easy to import full repositories too — allowing you to keep your GitBook content in sync.
-{% endhint %}
+3. 儲存並更新設定後，您可以在 **介面與儀表板** 中確認資訊是否與您的設定相符，以確保更改成功生效。
+
+<div><figure><img src="../.gitbook/assets/截圖 2025-02-12 清晨7.25.39.png" alt=""><figcaption></figcaption></figure> <figure><img src="../.gitbook/assets/截圖 2025-02-12 清晨7.25.47.png" alt=""><figcaption></figcaption></figure></div>

@@ -10,7 +10,7 @@
 ## Basics
 
 * [入門操作](basics/editor.md)
-* [Markdown](basics/markdown.md)
+* [設定 Hotspot 有線連接時使用固定IP](basics/markdown.md)
 * [Images & media](basics/images-and-media.md)
 * [Interactive blocks](basics/interactive-blocks.md)
 * [OpenAPI](basics/openapi.md)
