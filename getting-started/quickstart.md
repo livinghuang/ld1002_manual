@@ -25,3 +25,10 @@ SSID：「Linxdot-AP」\
 
 ### 3. **現在，您可以進入設定頁面來設定基本網路參數，並且 LoRaWAN 伺服器也已經在預設 IP** `10.100.100.1:8080` **上運作**
 
+### 4.  進入 **設定頁面**，預設 **Username（使用者名稱）** 為 `root`，**Password（密碼）** 為 `linxdot`。Port 為 80。 http://`10.100.100.1:80`
+
+<figure><img src="../.gitbook/assets/截圖 2025-02-12 清晨7.39.12.png" alt=""><figcaption></figcaption></figure>
+
+### 5.  進入 LoRaWAN **設定頁面**，預設 **Username（使用者名稱）** 為 admin，**Password（密碼）** 為 admin。Port 為 8080。 http://`10.100.100.1:8080`
+
+<figure><img src="../.gitbook/assets/截圖 2025-02-11 下午2.52.00.png" alt=""><figcaption></figcaption></figure>
