@@ -2,37 +2,17 @@
 icon: pen-to-square
 ---
 
-# Editor
+# 入門操作
 
-GitBook has a powerful block-based editor that allows you to seamlessly create, update, and enhance your content.
+<div data-full-width="true"><figure><img src="../.gitbook/assets/Linxdot_openwrt-banner.svg" alt=""><figcaption></figcaption></figure></div>
 
-<figure><img src="https://gitbookio.github.io/onboarding-template-images/editor-hero.png" alt=""><figcaption></figcaption></figure>
+Linxdot Hotspot 具備強大的 **IoT 閘道器** 功能，並運行於 **OpenWrt 作業系統**，提供穩定的服務。
 
-### Writing content
+本指南將逐步引導您，每個章節專注於單一主題或功能，幫助您順利完成各項操作。
 
-GitBook offers a range of block types for you to add to your content inline — from simple text and tables, to code blocks and more. These elements will make your pages more useful to readers, and offer extra information and context.
+### 主題
 
-Either start typing below, or press `/` to see a list of the blocks you can insert into your page.
+1. ### 設定 Hotspot 有線連接時使用固定IP
 
-### Add a new block
-
-{% stepper %}
-{% step %}
-### Open the insert block menu
-
-Press `/` on your keyboard to open the insert block menu.
-{% endstep %}
-
-{% step %}
-### Search for the block you need&#x20;
-
-Try searching for “Stepper”, for exampe, to insert the stepper block.
-{% endstep %}
-
-{% step %}
-### Insert and edit your block
-
-Click or press Enter to insert your block. From here, you’ll be able to edit it as needed.
-{% endstep %}
-{% endstepper %}
+note. 預設情況下，**Hotspot** 透過 **DHCP** 方式連接乙太網路。本章將引導您透過 **設定頁面**，將網路連線方式更改為 **固定 IP**。
 
