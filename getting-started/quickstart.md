@@ -2,22 +2,23 @@
 icon: bullseye-arrow
 ---
 
-# Quickstart
+# 快速指南
 
-<figure><img src="https://gitbookio.github.io/onboarding-template-images/quickstart-hero.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/ld1002_box.avif" alt=""><figcaption><p>LD1002 BOX</p></figcaption></figure>
 
-Beautiful documentation starts with the content you create — and GitBook makes it easy to get started with any pre-existing content.
 
-{% hint style="info" %}
-Want to learn about writing content from scratch? Head to the [Basics](https://github.com/GitbookIO/onboarding-template/blob/main/getting-started/broken-reference/README.md) section to learn more.
-{% endhint %}
 
-### Import
+### 1. Connect your device to the Linxdot hotspot
 
-GitBook supports importing content from many popular writing tools and formats. If your content already exists, you can upload a file or group of files to be imported.
+&#x20;The default wireless network name (SSIDs) and password are SSID: "Linxdot-AP" and password: "linxdot1234"
 
-<div data-full-width="false"><figure><img src="https://gitbookio.github.io/onboarding-template-images/quickstart-import.png" alt=""><figcaption></figcaption></figure></div>
+<div data-full-width="false"><figure><img src="../.gitbook/assets/截圖 2025-02-11 下午2.15.30.png" alt=""><figcaption></figcaption></figure></div>
 
-### Sync a repository
+### 2. Launch a web browser,and enter http://10.100.100.1
 
-GitBook also allows you to set up a bi-directional sync with an existing repository on GitHub or GitLab. Setting up Git Sync allows you and your team to write content in GitBook or in code, and never have to worry about your content becoming out of sync.
+If you face the risk warming in browser, please choice take the risk to enter the setup page.&#x20;
+
+<figure><img src="../.gitbook/assets/截圖 2025-02-11 下午2.22.17.png" alt=""><figcaption></figcaption></figure>
+
+### 3. Now you could enter the setting page to setup the basic network parameter and the LoraWAN server also workable in the default IP: 10.100.100.1:8080
+

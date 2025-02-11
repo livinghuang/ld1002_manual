@@ -4,7 +4,7 @@
 
 ## Getting Started
 
-* [Quickstart](getting-started/quickstart.md)
+* [快速指南](getting-started/quickstart.md)
 * [Publish your docs](getting-started/publish-your-docs.md)
 
 ## Basics
