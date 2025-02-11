@@ -5,7 +5,7 @@
 ## Getting Started
 
 * [快速指南](getting-started/quickstart.md)
-* [Publish your docs](getting-started/publish-your-docs.md)
+* [LORAWAN 快速使用指南](getting-started/publish-your-docs.md)
 
 ## Basics
 
