@@ -80,6 +80,8 @@ icon: hand-point-right
     ```
 7. **安裝完成後，回到 ChirpStack 管理介面**，確認 **Gateway 是否已成功連線**。
 
+<figure><img src="../.gitbook/assets/截圖 2025-02-12 中午12.00.40.png" alt=""><figcaption></figcaption></figure>
+
 ***
 
 ### **最終確認**
