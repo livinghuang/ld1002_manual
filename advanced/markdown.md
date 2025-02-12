@@ -175,3 +175,5 @@ icon: hand-point-right
     ```
 
     這將顯示 **Docker 容器目錄**內各個文件夾的大小，幫助您監控 **日誌檔案的使用空間**。
+
+<figure><img src="../.gitbook/assets/截圖 2025-02-12 上午9.12.26.png" alt=""><figcaption></figcaption></figure>
