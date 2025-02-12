@@ -11,7 +11,12 @@
 
 * [入門操作](basics/editor.md)
 * [設定 Hotspot 有線連接時使用固定IP](basics/markdown.md)
-* [Images & media](basics/images-and-media.md)
-* [Interactive blocks](basics/interactive-blocks.md)
-* [OpenAPI](basics/openapi.md)
-* [Integrations](basics/integrations.md)
+
+## ADVANCED
+
+* [進階操作](advanced/editor.md)
+* [設定 Hotspot 有線連接時使用固定IP](advanced/markdown.md)
+* [Images & media](advanced/images-and-media.md)
+* [Interactive blocks](advanced/interactive-blocks.md)
+* [OpenAPI](advanced/openapi.md)
+* [Integrations](advanced/integrations.md)
