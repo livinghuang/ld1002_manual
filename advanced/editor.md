@@ -14,9 +14,10 @@ note. 預設情況下，您可以使用 **root** 作為 **管理者帳號**，�
 
 ### 主題
 
-1. ### 設定LOG檔案大小
+### 1. 設定LOG檔案大小
 
-note. 預設情況下，**Hotspot** 使用 **Docker** 來運行 **LoRaWAN 伺服器**，並會記錄訊息以供除錯。
+### 2. 設定Internal LoRaWAN Gateway Package Forwarder
 
-您可以調整 **日誌大小**，以最佳化 **系統記憶體使用量**。
+### 3. Linxdot 韌體重刷指南
 
+### 4. Linxdot 安裝LoRaWAN服務
