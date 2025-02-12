@@ -15,7 +15,7 @@
 ## ADVANCED
 
 * [進階操作](advanced/editor.md)
-* [設定 Hotspot 有線連接時使用固定IP](advanced/markdown.md)
+* [設定LOG檔案大小](advanced/markdown.md)
 * [Images & media](advanced/images-and-media.md)
 * [Interactive blocks](advanced/interactive-blocks.md)
 * [OpenAPI](advanced/openapi.md)

@@ -2,13 +2,11 @@
 icon: hand-point-right
 ---
 
-# 設定 Hotspot 有線連接時使用固定IP
+# 設定LOG檔案大小
 
-本章將引導您透過 **設定頁面**，將網路連線方式更改為 **固定 IP**。
+本章將引導您設定 **日誌文件大小**，以最佳化 **系統記憶體使用量**。
 
-<figure><img src="../.gitbook/assets/截圖 2025-02-12 清晨7.21.09.png" alt=""><figcaption><p>Change DHCP To Static Fixed IP</p></figcaption></figure>
-
-1. 在您的瀏覽器中進入 **設定頁面** 並選擇 **網路->介面**。 進入**WAN 介面編輯**修改。&#x20;
+1. 使用 **SSH** 登入您的 **Hotspot**。
 
 <figure><img src="../.gitbook/assets/截圖 2025-02-12 清晨7.22.45.png" alt=""><figcaption></figcaption></figure>
 
