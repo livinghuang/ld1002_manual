@@ -8,8 +8,6 @@ icon: hand-point-right
 
 如果您 **重新刷機（Reflash）您的 Hotspot**，**LoRaWAN 服務可能不會自動安裝**，因此需要手動重新安裝。請按照以下步驟完成安裝。
 
-
-
 #### **安裝與 LoRaWAN 設定指南**
 
 ***
