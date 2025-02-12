@@ -80,7 +80,7 @@ Linxdot Hotspot 預設支援 **AS923 頻段**，可用頻率如下：
 * **923.2MHz、923.4MHz、923.6MHz、923.8MHz**
 * **924.0MHz、924.2MHz、924.4MHz、924.6MHz**
 
-您可以在 **LoRa Packet Forwarder 設定檔（`/etc/lora/global_conf.json`）** 內修改頻段，以符合您的應用需求。
+您還可以在 **`/etc/lora`** 目錄中找到其他 **區域設定檔（Region Configuration Files）**，如果需要更改 **LoRaWAN 頻段**，您可以參考這個章節 "[設定Internal LoRaWAN Gateway Package Forwarder](../advanced/markdown-1.md)"
 
 ***
 
