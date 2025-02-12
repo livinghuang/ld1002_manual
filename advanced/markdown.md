@@ -35,7 +35,8 @@ icon: hand-point-right
 2.  進入 **插入模式**（按下 `i`），然後貼上以下內容：
 
     ```yaml
-    ###### docker-compose.yml example
+    ########################
+    # docker-compose.yml example
     version: "3"
 
     services:
