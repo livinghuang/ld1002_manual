@@ -24,5 +24,5 @@ layout:
 
 ### 截徑
 
-<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-cover data-type="files"></th><th data-hidden></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td>快速</td><td>快速上手</td><td></td><td></td><td><a href="broken-reference">Broken link</a></td></tr><tr><td>入門</td><td>基礎操作</td><td></td><td></td><td><a href="broken-reference">Broken link</a></td></tr><tr><td>進階</td><td>進階操作</td><td></td><td></td><td><a href="advanced/editor.md">editor.md</a></td></tr><tr><td>Q&#x26;A</td><td>常見問題說明</td><td></td><td></td><td></td></tr></tbody></table>
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-cover data-type="files"></th><th data-hidden></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td>快速</td><td>快速上手</td><td></td><td></td><td><a href="broken-reference">Broken link</a></td></tr><tr><td>入門</td><td>基礎操作</td><td></td><td></td><td><a href="broken-reference">Broken link</a></td></tr><tr><td>進階</td><td>進階操作</td><td></td><td></td><td><a href="advanced/editor.md">editor.md</a></td></tr><tr><td>Q&#x26;A</td><td>常見問題說明</td><td></td><td></td><td><a href="q-and-a/editor.md">editor.md</a></td></tr></tbody></table>
 
