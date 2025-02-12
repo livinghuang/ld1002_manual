@@ -16,3 +16,4 @@
 
 * [進階操作](advanced/editor.md)
 * [設定LOG檔案大小](advanced/markdown.md)
+* [設定Internal LoRaWAN Gateway Package Forwarder](advanced/markdown-1.md)
