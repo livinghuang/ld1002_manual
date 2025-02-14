@@ -20,6 +20,8 @@
 * [Linxdot 韌體重刷指南](advanced/markdown-2.md)
 * [Linxdot 安裝LoRaWAN服務](advanced/markdown-3.md)
 * [Linxdot 安裝封包轉發多工器](advanced/markdown-4.md)
+* [Linxdot 安裝與設定為 Chirpstack  Mesh Relay](advanced/markdown-5.md)
+* [Linxdot 安裝與設定為 Chirpstack  Mesh Border](advanced/markdown-6.md)
 
 ## Q\&A
 
