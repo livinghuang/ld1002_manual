@@ -1,5 +1,6 @@
 ---
 icon: hand-point-right
+hidden: true
 ---
 
 # Linxdot 安裝與設定為 Chirpstack  Mesh Border
