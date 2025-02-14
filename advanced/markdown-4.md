@@ -208,9 +208,9 @@ icon: hand-point-right
     uplink_only = true # Only forward uplink packets (no downlink)
 
     # Forward to an additional external server (e.g., remote ChirpStack instance)
-    [[multiplexer.server]]
-    server = "remote-server.example.com:1700"
-    uplink_only = true  # Only forward uplink packets (no downlink)
+    # [[multiplexer.server]]
+    # server = "remote-server.example.com:1700"
+    # uplink_only = true  # Only forward uplink packets (no downlink)
 
     # Forward to an additional external server (e.g., TTS instance)
     [[multiplexer.server]]
