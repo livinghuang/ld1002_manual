@@ -20,7 +20,7 @@ icon: hand-point-right
 
 ***
 
-### **步驟 1：安裝 ChirpStack LoRaWAN 服務器**
+### **步驟 1：安裝 ChirpStack LoRaWAN** 封包轉發多工器
 
 1. 使用 **SSH** 登入您的 **Hotspot**。
 
