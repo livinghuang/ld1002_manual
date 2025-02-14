@@ -184,8 +184,31 @@ icon: hand-point-right
       redisdata:
       
     ```
-3. **儲存並退出**（按 `ESC`，輸入 `:wq`，然後按 `Enter`）。
-4.  #### **執行指令以重新啟動 Docker 服務**
+3.  新增與設定 chirpstack-packet-multiplexer.toml：
+
+    {% code overflow="wrap" %}
+    ```sh
+    # 新增資料夾
+    mkdir ./configuration/chirpstack-packet-multiplexer
+    # Create chirpstack-packet-multiplexer.toml
+    vi ./configuration/chirpstack-packet-multiplexer/chirpstack-packet-multiplexer.toml
+    ```
+    {% endcode %}
+4.  進入 **插入模式**（按下 `i`），然後貼上以下內容：
+
+    ```toml
+    [logging]
+    level = "info"
+
+    [multiplexer]
+    bind = "0.0.0.0:1700"
+
+    [[multiplexer.server]]
+    server = "chirpstack-gateway-bridge-as923:1700"
+    uplink_only = false
+    ```
+5. **儲存並退出**（按 `ESC`，輸入 `:wq`，然後按 `Enter`）。
+6.  #### **執行指令以重新啟動 Docker 服務**
 
     1.  **先停止 Docker 容器**：
 
@@ -199,7 +222,7 @@ icon: hand-point-right
         ```
 
     執行這些指令後，系統會自動重新啟動 **ChirpStack LoRaWAN 伺服器**，並應用新的 `docker-compose.yml` 設定。
-5.  現在，您可以使用以下指令來檢查 **日誌文件大小**：
+7.  現在，您可以使用以下指令來檢查 **日誌文件大小**：
 
     ```sh
     du -sh /opt/docker/containers/*
