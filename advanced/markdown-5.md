@@ -70,7 +70,7 @@ hidden: true
 
 ***
 
-### **步驟 1：安裝 ChirpStack LoRaWAN 服務器**
+### **步驟 1：安裝 ChirpStack LoRaWAN 中繼閘道器**
 
 1. 使用 **SSH** 登入您的 **Hotspot**。
 
