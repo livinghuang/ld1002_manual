@@ -206,6 +206,11 @@ icon: hand-point-right
     [[multiplexer.server]]
     server = "chirpstack-gateway-bridge-as923:1700"
     uplink_only = false
+
+    # Forward to an additional external server (e.g., remote ChirpStack instance)
+    [[multiplexer.server]]
+    server = "remote-server.example.com:1700"
+    uplink_only = true  # Only forward uplink packets (no downlink)
     ```
 5. **儲存並退出**（按 `ESC`，輸入 `:wq`，然後按 `Enter`）。
 6.  #### **執行指令以重新啟動 Docker 服務**
