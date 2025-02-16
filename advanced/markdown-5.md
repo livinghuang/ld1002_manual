@@ -1,6 +1,6 @@
 ---
-hidden: true
 icon: hand-point-right
+hidden: true
 ---
 
 # Linxdot 安裝Chirpstack Concerntatord and mqtt forwarder
@@ -72,41 +72,6 @@ icon: hand-point-right
           - POSTGRESQL_HOST=postgres
         ports:
           - 8080:8080
-        logging:
-          driver: "json-file"
-          options:
-            max-size: "10m"
-            max-file: "3"
-
-      chirpstack-gateway-bridge-as923:
-        image: chirpstack/chirpstack-gateway-bridge:4
-        restart: unless-stopped
-        ports:
-          - 1700:1700/udp
-        volumes:
-          - ./configuration/chirpstack-gateway-bridge:/etc/chirpstack-gateway-bridge
-        environment:
-          - INTEGRATION__MQTT__EVENT_TOPIC_TEMPLATE=as923/gateway/{{ .GatewayID }}/event/{{ .EventType }}
-          - INTEGRATION__MQTT__STATE_TOPIC_TEMPLATE=as923/gateway/{{ .GatewayID }}/state/{{ .StateType }}
-          - INTEGRATION__MQTT__COMMAND_TOPIC_TEMPLATE=as923/gateway/{{ .GatewayID }}/command/#
-        depends_on:
-          - mosquitto
-        logging:
-          driver: "json-file"
-          options:
-            max-size: "10m"
-            max-file: "3"
-      
-      chirpstack-gateway-bridge-basicstation:
-        image: chirpstack/chirpstack-gateway-bridge:4
-        restart: unless-stopped
-        command: -c /etc/chirpstack-gateway-bridge/chirpstack-gateway-bridge-basicstation-as923.toml
-        ports:
-          - 3001:3001
-        volumes:
-          - ./configuration/chirpstack-gateway-bridge:/etc/chirpstack-gateway-bridge
-        depends_on:
-          - mosquitto
         logging:
           driver: "json-file"
           options:
