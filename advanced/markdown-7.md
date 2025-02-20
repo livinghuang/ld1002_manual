@@ -202,7 +202,7 @@ hidden: true
       # encapsulated) will be silently ignored. This option is especially useful
       # for testing, in which case you want to set this to true for the Border
       # Gateway.
-      border_gateway_ignore_direct_uplinks=false
+      border_gateway_ignore_direct_uplinks=true
 
       # Mesh frequencies.
       #
@@ -492,4 +492,7 @@ hidden: true
      ./install-chirpstack-mqtt-fowarder.sh
     ```
 10. 在LoRaWAN Server 設定 Gateway
-11.
+
+<figure><img src="../.gitbook/assets/截圖 2025-02-21 清晨7.03.17.png" alt=""><figcaption></figcaption></figure>
+
+1.
