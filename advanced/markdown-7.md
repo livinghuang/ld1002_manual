@@ -493,6 +493,14 @@ hidden: true
     ```
 10. 在LoRaWAN Server 設定 Gateway
 
+
+
 <figure><img src="../.gitbook/assets/截圖 2025-02-21 清晨7.03.17.png" alt=""><figcaption></figcaption></figure>
 
-1.
+
+
+ㄘ
+
+1. &#x20;
+2.
+
