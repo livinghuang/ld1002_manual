@@ -493,14 +493,86 @@ hidden: true
     ```
 10. 在LoRaWAN Server 設定 Gateway
 
-
-
 <figure><img src="../.gitbook/assets/截圖 2025-02-21 清晨7.03.17.png" alt=""><figcaption></figcaption></figure>
 
 
 
-ㄘ
+#### **Linxdot-ChirpStack Border Gateway Concentratord 異常處理指南**
 
-1. &#x20;
-2.
+若 **`linxdot-chirpstack-border-gateway-concentratord`** 運作不正常，請按照以下步驟處理：
+
+***
+
+**Step 1: 暫時停止服務**
+
+先關閉正在運行的服務：
+
+```bash
+/etc/init.d/linxdot-chirpstack-border-gateway-concentratord stop
+```
+
+***
+
+**Step 2: 移除背景執行程序**
+
+1.  查找背景執行的 concentratord 程式：
+
+    ```bash
+    ps | grep concentratord
+    ```
+2.  找到相關程序後，使用 `kill` 指令將其停止：
+
+    ```bash
+    kill <程序ID>
+    ```
+
+***
+
+**Step 3: 獨立執行 Concentratord 進行測試**
+
+1.  切換到 concentratord 執行目錄：
+
+    ```bash
+    cd /etc/linxdot-opensource/chirpstack-border-gateway/chirpstack-concentratord-binary
+    ```
+2.  執行測試命令：
+
+    ```bash
+    ./chirpstack-concentratord-sx1302 \
+      -c ./config/concentratord.toml \
+      -c ./config/region_as923.toml \
+      -c ./config/channels_as923.toml
+    ```
+
+✅ **正常情況**：終端機會顯示相關執行日誌。
+
+***
+
+**Step 4: 重啟 Concentratord 服務**
+
+執行以下命令重新啟動並啟用開機自動啟動：
+
+```bash
+/etc/init.d/linxdot-chirpstack-border-gateway-concentratord enable
+/etc/init.d/linxdot-chirpstack-border-gateway-concentratord start
+```
+
+***
+
+**Step 5: 查看執行日誌確認狀態**
+
+持續查看 concentratord 執行日誌，確認運作是否正常：
+
+```bash
+logread -f | grep concentratord
+```
+
+***
+
+🔎 **備註**：
+
+* 如遇到無法停止的背景程序，請使用 `kill -9 <程序ID>` 強制終止。
+* 若日誌中有錯誤訊息，請記錄下來以便後續排查或提供給技術支援。
+
+***
 
