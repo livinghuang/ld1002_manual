@@ -87,373 +87,110 @@ Relay Gateway 是一種無需網際網路連接的 LoRaWAN 閘道器，常見硬
 
 Relay Gateway 作為 Mesh 網路中的中繼節點，能有效擴展 LoRaWAN 網路覆蓋範圍，實現無網路環境下的穩定通訊。
 
-#### **安裝與設定指南**
+#### 安裝與設定指南
 
 ***
 
-### **步驟 1：安裝 ChirpStack LoRaWAN 服務器**
+**步驟 1：停止 Docker，關閉 ChirpStack LoRaWAN 服務**
 
-1. 使用 **SSH** 登入您的 **Hotspot**。
+1. 使用 SSH 登入您的 Hotspot。
+2.  輸入以下指令以停用並停止 Docker 服務：
 
-<figure><img src="../.gitbook/assets/截圖 2025-02-12 上午8.35.21.png" alt=""><figcaption></figcaption></figure>
-
-2.  現在進入資料夾路徑：
-
-    {% code overflow="wrap" %}
-    ```sh
-    # 進入資料夾路徑
-    cd /mnt/opensource-system/chirpstack-docker
-    # 刪除預設的 docker-compose.yml 文件
-    rm docker-compose.yml
-    # Create the new docker-compose.yml
-    vi docker-compose.yml
+    ```bash
+    /etc/init.d/dockerd disable
+    /etc/init.d/dockerd stop
     ```
-    {% endcode %}
 
-以下是新的 `docker-compose.yml` 範例，您可以直接複製並使用 **vi 編輯器** 貼上到 **Hotspot** 的 `docker-compose.yml`，然後儲存。
+***
 
-#### 步驟：
+**步驟 2：設定 ChirpStack Gateway Mesh**
 
-1.  使用 **vi 編輯器** 開啟 `docker-compose.yml`：
+1.  切換至設定目錄：
 
-    ```sh
-    vi docker-compose.yml
-    ```
-2.  進入 **插入模式**（按下 `i`），然後貼上以下內容：
-
-    ```yaml
-    version: "3"
-
-    services:
-      chirpstack:
-        image: chirpstack/chirpstack:4
-        command: -c /etc/chirpstack
-        restart: unless-stopped
-        volumes:
-          - ./configuration/chirpstack:/etc/chirpstack
-          - ./lorawan-devices:/opt/lorawan-devices
-        depends_on:
-          - postgres
-          - mosquitto
-          - redis
-        environment:
-          - MQTT_BROKER_HOST=mosquitto
-          - REDIS_HOST=redis
-          - POSTGRESQL_HOST=postgres
-        ports:
-          - 8080:8080
-        logging:
-          driver: "json-file"
-          options:
-            max-size: "10m"
-            max-file: "3"
-
-      chirpstack-rest-api:
-        image: chirpstack/chirpstack-rest-api:4
-        restart: unless-stopped
-        command: --server chirpstack:8080 --bind 0.0.0.0:8090 --insecure
-        ports:
-          - 8090:8090
-        depends_on:
-          - chirpstack
-        logging:
-          driver: "json-file"
-          options:
-            max-size: "10m"
-            max-file: "3"
-
-      postgres:
-        image: postgres:14-alpine
-        restart: unless-stopped
-        volumes:
-          - ./configuration/postgresql/initdb:/docker-entrypoint-initdb.d
-          - postgresqldata:/var/lib/postgresql/data
-        environment:
-          - POSTGRES_PASSWORD=root
-        logging:
-          driver: "json-file"
-          options:
-            max-size: "10m"
-            max-file: "3"
-
-      redis:
-        image: redis:7-alpine
-        restart: unless-stopped
-        command: redis-server --save 300 1 --save 60 100 --appendonly no --ignore-warnings ARM64-COW-BUG
-        volumes:
-          - redisdata:/data
-        logging:
-          driver: "json-file"
-          options:
-            max-size: "10m"
-            max-file: "3"
-
-      mosquitto:
-        image: eclipse-mosquitto:2
-        restart: unless-stopped
-        ports:
-          - 1883:1883
-        volumes: 
-          - ./configuration/mosquitto/config/:/mosquitto/config/
-        logging:
-          driver: "json-file"
-          options:
-            max-size: "10m"
-            max-file: "3"
-
-    volumes:
-      postgresqldata:
-      redisdata:
-    ```
-3.  設定取得 gateway id：
-
-    {% code overflow="wrap" %}
-    ```sh
-    cd /etc/linxdot-opensource/chirpstack-border-gateway/chirpstack-concentratord-binary 
-    ./chirpstack-concentratord-sx1302 -c config/concentratord.toml -c config/channels_as923.toml | grep gateway_id
-    #看到gateway_id的數值後，就可以先中斷
-    #在執行log中找到gateway_id, 記錄下來
-    ```
-    {% endcode %}
-4.  設定 chirpstack-gateway-mesh-binary：
-
-    ```sh
+    ```bash
     cd /etc/linxdot-opensource/chirpstack-border-gateway/chirpstack-gateway-mesh-binary/config
+    ```
+2.  刪除舊設定檔並建立新檔案：
+
+    ```bash
     rm chirpstack-gateway-mesh.toml
     vi chirpstack-gateway-mesh.toml
     ```
-5.  進入 **插入模式**（按下 `i`），然後貼上以下內容：
-
-    ```toml
-    # Logging settings.
-    [logging]
-
-      # Log level.
-      #
-      # Valid options are:
-      #   * TRACE
-      #   * DEBUG
-      #   * INFO
-      #   * WARN
-      #   * ERROR
-      #   * OFF
-      level="INFO"
-
-      # Log to syslog.
-      #
-      # When set to true, log messages are being written to syslog instead of stdout.
-      log_to_syslog=false
-
-
-    # Mesh configuration.
-    [mesh]
-
-      # Signing key (AES128, HEX encoded).                                           
-      #                                                                          
-      # This key is used to sign and validate each mesh packet. This key must be
-      # configured on every Border / Relay gateway equally.                      
-      signing_key="a08ed9e0cca290514071818786f9f9dd" # please change it 
-
-      # Border Gateway.
-      #
-      # If this is set to true, then the ChirpStack Gateway Mesh will consider
-      # this gateway as a Border Gateway, meaning that it will unwrap relayed
-      # uplinks and forward these to the proxy API, rather than relaying these.
-      border_gateway=false
-
-      # Max hop count.
-      #
-      # This defines the maximum number of hops a relayed payload will pass.
-      max_hop_count=8 # max=8
-
-      # Ignore direct uplinks (Border Gateway).
-      #
-      # If this is set to true, then direct uplinks (uplinks that are not relay
-      # encapsulated) will be silently ignored. This option is especially useful
-      # for testing, in which case you want to set this to true for the Border
-      # Gateway.
-      border_gateway_ignore_direct_uplinks=false
-
-      # Mesh frequencies.
-      #
-      # The ChirpStack Gateway Mesh will randomly use one of the configured
-      # frequencies when relaying uplink and downlink messages.
-      frequencies=[                                                                                                                              
-        923200000,
-        923400000,
-        923600000,
-        923800000,
-        924000000,
-        924200000,
-        924400000,
-        924600000,                                                          
-      ]  
-
-
-      # TX Power (EIRP).
-      #
-      # The TX Power in EIRP used when relaying uplink and downlink messages.
-      tx_power=16
-
-      # Data-rate properties.
-      #
-      # The data-rate properties when relaying uplink and downlink messages.
-      [mesh.data_rate]
-      
-        # Modulation.
-        #
-        # Valid options are: LORA, FSK
-        modulation="LORA"
-
-        # Spreading-factor (LoRa).
-        spreading_factor=7
-
-        # Bandwidth (LoRa).
-        bandwidth=125000
-
-        # Code-rate (LoRa).
-        code_rate="4/5"
-
-        # Bitrate (FSK).
-        bitrate=0
-
-
-      # Proxy API configuration.
-      #
-      # If the gateway is configured to operate as Border Gateway. It
-      # will unwrap relayed uplink frames, and will wrap downlink payloads that
-      # must be relayed. In this case the ChirpStack MQTT Forwarder must be
-      # configured to use the proxy API instead of the Concentratord API.
-      #
-      # Payloads of devices that are under the direct coverage of this gateway
-      # are transparently proxied between the ChirpStack MQTT Forwarder and
-      # ChirpStack Concentratord.
-      #
-      # This configuration is only used when the border_gateway option is set
-      # to true.
-      [mesh.proxy_api]
-
-        # Event PUB socket bind.
-        event_bind="ipc:///tmp/gateway_relay_event"
-
-        # Command REP socket bind.
-        command_bind="ipc:///tmp/gateway_relay_command"
-
-
-    # Backend configuration.
-    [backend]
-
-      # ChirpStack Concentratord configuration (end-device communication).
-      [backend.concentratord]
-
-        # Event API URL.
-        event_url="ipc:///tmp/concentratord_event"
-
-        # Command API URL.
-        command_url="ipc:///tmp/concentratord_command"
-
-
-      # ChirpStack Concentratord configuration (mesh communication).
-      #
-      # While not required, this configuration makes it possible to use a different
-      # Concentratord instance for the mesh communication. E.g. this
-      # makes it possible to use ISM2400 for mesh communication and EU868 for
-      # communication with the end-devices.
-      [backend.mesh_concentratord]
-
-        # Event API URL.
-        event_url="ipc:///tmp/concentratord_event"
-
-        # Command API URL.
-        command_url="ipc:///tmp/concentratord_command"
-    ```
-6. **儲存並退出**（按 `ESC`，輸入 `:wq`，然後按 `Enter`）。
-7.  啟動服務：
-
-    ```sh
-     cd /etc/linxdot-opensource
-     ./install-chirpstack-border-gateway-concentratord.sh 
-     ./install-chirpstack-border-gateway-mesh.sh
-    ```
-8. 在LoRaWAN Server 設定 Gateway
-
-<figure><img src="../.gitbook/assets/截圖 2025-02-21 清晨7.03.17.png" alt=""><figcaption></figcaption></figure>
-
-
-
-#### **Linxdot-ChirpStack Border Gateway Concentratord 異常處理指南**
-
-若 **`linxdot-chirpstack-border-gateway-concentratord`** 運作不正常，請按照以下步驟處理：
+3. 在 `vi` 編輯器中，按下 `i` 進入插入模式，將以下內容貼上並根據需求修改。
 
 ***
 
-**Step 1: 暫時停止服務**
+**chirpstack-gateway-mesh.toml 配置範本**
 
-先關閉正在運行的服務：
+```toml
+[logging]
+level="INFO"            
+log_to_syslog=false     
 
-```bash
-/etc/init.d/linxdot-chirpstack-border-gateway-concentratord stop
+[mesh]
+signing_key="a08ed9e0cca290514071818786f9f9dd"  
+border_gateway=false                           
+max_hop_count=8                                
+border_gateway_ignore_direct_uplinks=false     
+
+frequencies=[                                  
+  923200000,
+  923400000,
+  923600000,
+  923800000,
+  924000000,
+  924200000,
+  924400000,
+  924600000,
+]
+
+tx_power=16                                    
+
+[mesh.data_rate]
+modulation="LORA"                              
+spreading_factor=7                             
+bandwidth=125000                               
+code_rate="4/5"                                
+
+[mesh.proxy_api]
+event_bind="ipc:///tmp/gateway_relay_event"
+command_bind="ipc:///tmp/gateway_relay_command"
+
+[backend]
+  [backend.concentratord]
+  event_url="ipc:///tmp/concentratord_event"
+  command_url="ipc:///tmp/concentratord_command"
+
+  [backend.mesh_concentratord]
+  event_url="ipc:///tmp/concentratord_event"
+  command_url="ipc:///tmp/concentratord_command"
 ```
 
+4. 儲存並退出
+   * 按 `ESC`，輸入 `:wq` 後按 `Enter` 儲存檔案並退出。
+
 ***
 
-**Step 2: 移除背景執行程序**
+**步驟 3：啟動服務**
 
-1.  查找背景執行的 concentratord 程式：
+1.  回到專案根目錄並執行安裝腳本：
 
     ```bash
-    ps | grep concentratord
+    cd /etc/linxdot-opensource
+    ./install-chirpstack-border-gateway-concentratord.sh
+    ./install-chirpstack-border-gateway-mesh.sh
     ```
-2.  找到相關程序後，使用 `kill` 指令將其停止：
+2.  檢查執行狀態\
+    查看 Concentratord 執行日誌以確保服務正常運作：
 
     ```bash
-    kill <程序ID>
+    logread -f | grep concentratord
     ```
 
 ***
 
-**Step 3: 獨立執行 Concentratord 進行測試**
-
-1.  切換到 concentratord 執行目錄：
-
-    ```bash
-    cd /etc/linxdot-opensource/chirpstack-border-gateway/chirpstack-concentratord-binary
-    ```
-2.  執行測試命令：
-
-    ```bash
-    ./chirpstack-concentratord-sx1302 \
-      -c ./config/concentratord.toml \
-      -c ./config/region_as923.toml \
-      -c ./config/channels_as923.toml
-    ```
-
-✅ **正常情況**：終端機會顯示相關執行日誌。
+安裝與設定完成後，請確認 Gateway 已成功連線並可正常轉發 LoRaWAN 封包。\
+請務必修改 `signing_key` 為專屬安全金鑰以確保資料傳輸安全。
 
 ***
 
-**Step 4: 重啟 Concentratord 服務**
-
-執行以下命令重新啟動並啟用開機自動啟動：
-
-```bash
-/etc/init.d/linxdot-chirpstack-border-gateway-concentratord enable
-/etc/init.d/linxdot-chirpstack-border-gateway-concentratord start
-```
-
-***
-
-**Step 5: 查看執行日誌確認狀態**
-
-持續查看 concentratord 執行日誌，確認運作是否正常：
-
-```bash
-logread -f | grep concentratord
-```
-
-***
-
-🔎 **備註**：
-
-* 如遇到無法停止的背景程序，請使用 `kill -9 <程序ID>` 強制終止。
-* 若日誌中有錯誤訊息，請記錄下來以便後續排查或提供給技術支援。
