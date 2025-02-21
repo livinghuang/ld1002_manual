@@ -1,6 +1,5 @@
 ---
 icon: hand-point-right
-hidden: true
 ---
 
 # Linxdot 安裝 Chirpstack Gateway Mesh 並設定角色為 Relay（中繼閘道器）
