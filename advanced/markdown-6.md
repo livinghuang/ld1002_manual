@@ -45,26 +45,47 @@ hidden: true
 
 #### **Relay Gateway（中繼閘道器）簡介**
 
-**Relay Gateway** 是 **不直接連接到 ChirpStack**，且 **可在無網際網路連線的環境下運作** 的 **LoRaWAN 閘道器**。
+Relay Gateway 是一種無需網際網路連接的 LoRaWAN 閘道器，常見硬體為 SX1301/2/3 系列（可選配 ISM2400 集中器模組）。\
+該設備可由太陽能供電，適合部署於偏遠或無電力基礎設施的環境中。
 
 ***
 
 #### **Relay Gateway 的功能**
 
-1. **上行（Uplink）封包處理**
-   * 接收 **LoRaWAN 裝置的 Uplink 資料**。
-   * 將 **LoRaWAN 上行訊框（Uplink Frames）** **封裝（Encapsulate）** 成 **Mesh 格式**，然後轉發給下一個 **Relay Gateway 或 Border Gateway**。
-2. **下行（Downlink）封包處理**
-   * 從其他 **Relay Gateway 或 Border Gateway** 接收 **Mesh 格式的 LoRaWAN 下行訊框**。
-   * **解封（Unwrap）Mesh 格式的 LoRaWAN 下行訊框**，並將資料發送給 **最終的 LoRaWAN 裝置**。
+**上行（Uplink）封包處理**
+
+* 接收來自 LoRaWAN 裝置的上行資料。
+* 將上行訊框封裝成 Mesh 格式。
+* 透過 Mesh 網路將封裝後的資料轉發至其他 Relay Gateway 或 Border Gateway。
+
+**下行（Downlink）封包處理**
+
+* 從 Border Gateway 或其他 Relay Gateway 接收 Mesh 格式下行訊框。
+* 解封 Mesh 封裝，取得原始 LoRaWAN 下行資料。
+* 將資料傳送至對應的 LoRaWAN 裝置。
 
 ***
 
 #### **Relay Gateway 的特點**
 
-* **不需要網際網路連線**，適用於 **遠端地區、偏遠環境或無法提供網路基礎設施的場景**。
-* **僅負責封包轉發**，它不直接與 **ChirpStack 伺服器** 溝通。
-* **可多次跳轉（Multi-Hop）**，允許 LoRaWAN 資料在 **多個 Relay Gateway 之間傳遞**，最終送達 **Border Gateway**。
+* 無需網際網路連線，適用於遠端或無網路基礎設施的場景。
+* 可由太陽能供電，適合偏遠地區長期運行。
+* 透過 ChirpStack Gateway Mesh 管理上行與下行資料的中繼傳輸。
+* 支援多跳傳輸（Multi-Hop），可在多個 Relay Gateway 間傳遞資料直至 Border Gateway。
+* 與 Border Gateway 的通訊可使用與終端裝置相同的無線頻段，或根據硬體能力與應用需求使用 ISM2400 頻段。
+
+***
+
+#### **Relay Gateway 的組件需求**
+
+在 Relay Gateway 上需安裝以下組件：
+
+* ChirpStack Concentratord
+* ChirpStack Gateway Mesh
+
+***
+
+Relay Gateway 作為 Mesh 網路中的中繼節點，能有效擴展 LoRaWAN 網路覆蓋範圍，實現無網路環境下的穩定通訊。
 
 #### **安裝與設定指南**
 

@@ -1,21 +1,74 @@
 ---
 icon: hand-point-right
-hidden: true
 ---
 
 # Linxdot 安裝 Chirpstack Gateway Mesh 並設定角色為 Border
 
-#### **本章將引導您在 Linxdot Hotspot 安裝** 封包轉發多工器
+**本章將引導您在 Linxdot Hotspot** 安裝與設定為 Chirpstack Gateway Mesh Border
 
-封包轉發多工器 允許使用 **Semtech UDP packet-forwarder** 協議的閘道器同時連接到多個伺服器，並且可以選擇將某些伺服器標記為**僅上行 (uplink only)**。
+#### **ChirpStack Gateway Mesh 簡介**
 
-這意味著：
+**ChirpStack Gateway Mesh** 是一款 **軟體組件**，可以運行在 **LoRa® 閘道器** 上，將這些閘道器轉換為 **兩種角色**：
 
-1. **多重伺服器支援**：一個 LoRaWAN 閘道器可以同時將數據傳輸到多個 ChirpStack 伺服器，而不需要為每個伺服器配置獨立的閘道器。
-2. **上行數據選擇性傳輸**：可以將某些伺服器設定為僅接收上行數據（上傳來自 LoRa 裝置的訊息），而不會發送下行數據（如 LoRaWAN 訊息或指令）。
-3. **適用於多平台架構**：若一個 LoRaWAN 網絡需要同時將數據發送到不同的應用或服務，這個多工器可以有效地管理流量，確保所有目標伺服器都能夠獲取相同的數據。
+1. **Relay Gateway（中繼閘道器）**：
+   * 主要負責 **轉發 LoRaWAN 資料**（上行與下行）。
+   * 適用於無法直接連接網際網路的閘道器，通常為 **太陽能供電** 的遠端設備。
+2. **Border Gateway（邊界閘道器）**：
+   * 負責 **終止 Mesh 協議**，並與 **ChirpStack 伺服器** 直接通訊。
+   * 需要 **網際網路連接**，以處理來自 Relay Gateway 的 LoRaWAN 訊息。
 
-這樣的設計可提高數據靈活性，讓使用者能夠更有效地整合不同的 LoRaWAN 平台或數據處理系統。
+<figure><img src="../.gitbook/assets/截圖 2025-02-15 清晨7.29.51.png" alt=""><figcaption><p><strong>ChirpStack Gateway Mesh 架構圖</strong></p></figcaption></figure>
+
+***
+
+#### **ChirpStack Gateway Mesh 的目的**
+
+該組件的主要目標是 **擴展 LoRaWAN® 覆蓋範圍**，尤其適用於 **遠端地區** 或 **網際網路覆蓋不足** 的環境。
+
+* 在無法連接網際網路的地區，**Relay Gateway** 可以將 LoRaWAN 訊息轉發給 **Border Gateway**。
+* 這種 **中繼機制** 確保了即使裝置處於 **無網路環境**，也能透過 **LoRa 進行資料轉發**，直到訊息傳遞至 Border Gateway 並最終送達 **ChirpStack 伺服器**。
+* **與 LoRa 聯盟（LoRa Alliance） 的 Relay Protocol 不同**，此解決方案 **不需要修改裝置端的軟體**，因此更容易部署。
+
+***
+
+#### **技術限制**
+
+1. **支援最多 8 個 Hops（跳點）**
+   * 第一個 Relay Gateway 被視為 **第 1 跳（Hop）**。
+   * 之後最多可有 **7 個額外的 Relay Gateway**。
+2. **受限於 LoRa 空中時間（Airtime）**
+   * 由於 Relay Gateway 需要接收並重新傳輸封包，因此空中時間（Airtime） 會影響中繼效果。
+   * 如果 Relay 過多，可能會導致網路擁塞，影響效能。
+
+***
+
+#### **Border Gateway（邊界閘道器）簡介**
+
+Border Gateway 是 **具備網際網路連接功能** 的 LoRaWAN 閘道器，可處理 Mesh 封裝的 LoRaWAN 負載資料。
+
+***
+
+#### **Border Gateway 的功能**
+
+**上行（Uplink）封包處理**
+
+* 接收其他 Relay Gateway 傳來的 Mesh 格式 LoRaWAN 上行訊框。
+* 解封（Unwrap）Mesh 格式後，將 LoRaWAN 上行資料傳送至 ChirpStack。
+* 在上行傳輸中，設置包含 Mesh 特定資訊的上下文 (Context)，以便下行傳輸時使用。
+
+**下行（Downlink）封包處理**
+
+* 從 ChirpStack 接收下行資料（需包含先前上行設置的上下文資訊）。
+* 將下行資料封裝（Encapsulate）成 Mesh 格式。
+* 傳送 Mesh 格式下行訊框給對應的 Relay Gateway 或終端裝置。
+
+***
+
+#### **Border Gateway 的特點**
+
+* **可直接與 ChirpStack 伺服器溝通**，實現 LoRaWAN 裝置與伺服器之間的資料傳輸。
+* **處理 Mesh 封裝與解封**，確保 Mesh 網路中的資料可正確傳遞至 ChirpStack。
+* **保留上下文資訊**，確保上行與下行傳輸過程中，Mesh 特定資料能正確匹配。
 
 #### **安裝與設定指南**
 
