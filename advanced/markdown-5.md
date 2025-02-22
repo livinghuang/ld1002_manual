@@ -1,13 +1,14 @@
 ---
 icon: hand-point-right
-hidden: true
 ---
 
-# Linxdot 安裝Chirpstack Concerntatord and mqtt forwarder
+# Linxdot 安裝Chirpstack Concerntatord 封包集中器
 
-#### **本章將引導您在 Linxdot Hotspot 安裝** 封包轉發多工器
+#### **章將引導您在 Linxdot Hotspot 安裝** Chirpstack Concerntatord  封包集中器
 
-封包轉發多工器 允許使用 **Semtech UDP packet-forwarder** 協議的閘道器同時連接到多個伺服器，並且可以選擇將某些伺服器標記為**僅上行 (uplink only)**。
+ChirpStack Concentratord 是一個開源的 LoRaWAN 集中器守護程序，基於 Semtech 的硬體抽象層 (HAL) 所建構。它提供了一個基於 ZeroMQ 的 API，讓一個或多個應用程式可以與閘道硬體互動。 透過將硬體特定的實作與封裝放在單獨的守護程序中，並透過 ZeroMQ API 對外暴露，封包轉發應用程式能完全與閘道硬體解耦。這樣的架構也讓多個應用程式可以同時與閘道硬體互動。例如，多個封包轉發器可將資料分別轉發到不同的 LoRaWAN 網路伺服器。
+
+<figure><img src="../.gitbook/assets/截圖 2025-02-23 凌晨4.29.03.png" alt=""><figcaption></figcaption></figure>
 
 這意味著：
 
@@ -21,173 +22,106 @@ hidden: true
 
 ***
 
-### **步驟 1：安裝 ChirpStack LoRaWAN** 封包轉發多工器
+### **步驟 1：啟用** Chirpstack Concerntatord 封包集中器
 
 1. 使用 **SSH** 登入您的 **Hotspot**。
 
 <figure><img src="../.gitbook/assets/截圖 2025-02-12 上午8.35.21.png" alt=""><figcaption></figcaption></figure>
 
-2.  現在進入資料夾路徑：
+2.  設定 Chirpstack Concerntatord 封包集中器：
 
     {% code overflow="wrap" %}
     ```sh
     # 進入資料夾路徑
-    cd /mnt/opensource-system/chirpstack-docker
-    # 刪除預設的 docker-compose.yml 文件
-    rm docker-compose.yml
-    # Create the new docker-compose.yml
-    vi docker-compose.yml
+    cd /etc/linxdot-opensource/chirpstack-software/chirpstack-concentratord-binary/config
+    # 刪除預設的 concentratord.toml 文件
+    rm concentratord.toml
+    # Create the new concentratord.toml
+    vi concentratord.toml
     ```
     {% endcode %}
 
-以下是新的 `docker-compose.yml` 範例，您可以直接複製並使用 **vi 編輯器** 貼上到 **Hotspot** 的 `docker-compose.yml`，然後儲存。
+以下是新的 concentratord.toml 範例，您可以直接複製並使用 **vi 編輯器** 貼上到 **Hotspot** 的 concentratord.toml，然後儲存。
 
 #### 步驟：
 
-1.  使用 **vi 編輯器** 開啟 `docker-compose.yml`：
+1.  使用 **vi 編輯器** 開啟 concentratord.toml：
 
     ```sh
-    vi docker-compose.yml
+    vi concentratord.toml
     ```
 2.  進入 **插入模式**（按下 `i`），然後貼上以下內容：
 
     ```yaml
-    version: "3"
+    # Concentratord configuration.
+    [concentratord]
 
-    services:
-      chirpstack:
-        image: chirpstack/chirpstack:4
-        command: -c /etc/chirpstack
-        restart: unless-stopped
-        volumes:
-          - ./configuration/chirpstack:/etc/chirpstack
-          - ./lorawan-devices:/opt/lorawan-devices
-        depends_on:
-          - postgres
-          - mosquitto
-          - redis
-        environment:
-          - MQTT_BROKER_HOST=mosquitto
-          - REDIS_HOST=redis
-          - POSTGRESQL_HOST=postgres
-        ports:
-          - 8080:8080
-        logging:
-          driver: "json-file"
-          options:
-            max-size: "10m"
-            max-file: "3"
+    # Log level.
+    #
+    # Valid options are:
+    #   * TRACE
+    #   * DEBUG
+    #   * INFO
+    #   * WARN
+    #   * ERROR
+    #   * OFF
+    log_level="INFO"
 
-      chirpstack-rest-api:
-        image: chirpstack/chirpstack-rest-api:4
-        restart: unless-stopped
-        command: --server chirpstack:8080 --bind 0.0.0.0:8090 --insecure
-        ports:
-          - 8090:8090
-        depends_on:
-          - chirpstack
-        logging:
-          driver: "json-file"
-          options:
-            max-size: "10m"
-            max-file: "3"
-      
-      postgres:
-        image: postgres:14-alpine
-        restart: unless-stopped
-        volumes:
-          - ./configuration/postgresql/initdb:/docker-entrypoint-initdb.d
-          - postgresqldata:/var/lib/postgresql/data
-        environment:
-          - POSTGRES_PASSWORD=root
-        logging:
-          driver: "json-file"
-          options:
-            max-size: "10m"
-            max-file: "3"
+    # Log to syslog.
+    #
+    # When set to true, log messages are being written to syslog instead of stdout.
+    log_to_syslog=false
 
-      redis:
-        image: redis:7-alpine
-        restart: unless-stopped
-        command: redis-server --save 300 1 --save 60 100 --appendonly no --ignore-warnings ARM64-COW-BUG
-        volumes:
-          - redisdata:/data
-        logging:
-          driver: "json-file"
-          options:
-            max-size: "10m"
-            max-file: "3"
+    # Statistics interval.
+    stats_interval="30s"
 
-      mosquitto:
-        image: eclipse-mosquitto:2
-        restart: unless-stopped
-        ports:
-          - 1883:1883
-        volumes: 
-          - ./configuration/mosquitto/config/:/mosquitto/config/
-        logging:
-          driver: "json-file"
-          options:
-            max-size: "10m"
-            max-file: "3"
+      # Configuration for the (ZeroMQ based) API.
+      [concentratord.api]
 
-    volumes:
-      postgresqldata:
-      redisdata:
-      
+      # Event PUB socket bind.
+      event_bind="ipc:///tmp/concentratord_event"
+
+      # Command REP socket bind.
+      command_bind="ipc:///tmp/concentratord_command"
+
+
+    # LoRa gateway configuration.
+    [gateway]
+
+    # Antenna gain (dBi).
+    antenna_gain=0
+
+    # Public LoRaWAN network.
+    lorawan_public=false
+
+    # Region.
+    #
+    # The region of the gateway. Options:
+    #  EU868, US915, CN779, EU433, AU915, CN470, AS923, AS923_2, AS923_3, AS923_4,
+    #  KR923, IN865, RU864
+    #
+    # Not not all the gateway models implement all regions.
+    region="AS923"
+
+    # Gateway vendor / model.
+    #
+    # This configures various vendor and model specific settings like the min / max
+    # frequency, TX gain table.
+    model="linxdot_ld1002"
+
+    # Gateway vendor / model flags.
+    model_flags=[]
     ```
-3.  新增與設定 chirpstack-packet-multiplexer.toml：
-
-    {% code overflow="wrap" %}
-    ```sh
-    # 新增資料夾
-    mkdir ./configuration/chirpstack-packet-multiplexer
-    # Create chirpstack-packet-multiplexer.toml
-    vi ./configuration/chirpstack-packet-multiplexer/chirpstack-packet-multiplexer.toml
-    ```
-    {% endcode %}
-4.  進入 **插入模式**（按下 `i`），然後貼上以下內容：
-
-    ```toml
-    [logging]
-    level = "info"
-
-    [multiplexer]
-    bind = "0.0.0.0:1700"
-
-    [[multiplexer.server]]
-    server = "chirpstack-gateway-bridge-as923:1700"
-    uplink_only = true # Only forward uplink packets (no downlink)
-
-    # Forward to an additional external server (e.g., remote ChirpStack instance)
-    # [[multiplexer.server]]
-    # server = "remote-server.example.com:1700"
-    # uplink_only = true  # Only forward uplink packets (no downlink)
-
-    # Forward to an additional external server (e.g., TTS instance)
-    [[multiplexer.server]]
-    server = "linxdot.as1.cloud.thethings.industries:1700"
-    uplink_only = false
-    ```
-5. **儲存並退出**（按 `ESC`，輸入 `:wq`，然後按 `Enter`）。
-6.  #### **執行指令以重新啟動 Docker 服務**
-
-    1.  **先停止 Docker 容器**：
-
-        ```sh
-        docker-compose down
-        ```
-    2.  **重新啟動 Docker 容器**：
-
-        ```sh
-        docker-compose up -d
-        ```
-
-    執行這些指令後，系統會自動重新啟動 **ChirpStack LoRaWAN 伺服器**，並應用新的 `docker-compose.yml` 設定。
-7.  現在，您可以使用以下指令來檢查 **日誌文件大小**：
+3.  啟動服務：
 
     ```sh
-    du -sh /opt/docker/containers/*
+    cd /etc/linxdot-opensource
+    ./install-chirpstack-concentratord.sh
     ```
+4.  **查看執行日誌確認狀態**
 
-    這將顯示 **Docker 容器目錄**內各個文件夾的大小，幫助您監控 **日誌檔案的使用空間**。
+    持續查看 concentratord 執行日誌，確認運作是否正常：
+
+    ```bash
+    logread -f | grep concentratord
+    ```
