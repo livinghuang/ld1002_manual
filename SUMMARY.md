@@ -27,6 +27,10 @@
   * [Linxdot 安裝MQTT封包轉發器](advanced/markdown-5/markdown-3.md)
   * [Linxdot 安裝UDP封包轉發器](advanced/markdown-5/markdown-4.md)
 
+***
+
+* [Copy of Linxdot 安裝封包轉發多工器](markdown.md)
+
 ## Q\&A
 
 * [常見問題 FAQ](q-and-a/editor.md)
