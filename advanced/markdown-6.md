@@ -2,194 +2,126 @@
 icon: hand-point-right
 ---
 
-# Linxdot 安裝 Chirpstack Gateway Mesh 並設定角色為 Relay（中繼閘道器）
+# Linxdot 安裝Chirpstack Concerntatord 封包集中器
 
-#### **本章將引導您在 Linxdot Hotspot** 安裝與設定為 Chirpstack Gateway Mesh Relay
+#### **章將引導您在 Linxdot Hotspot 安裝** Chirpstack Concerntatord  封包集中器
 
-#### **ChirpStack Gateway Mesh 簡介**
+ChirpStack Concentratord 是一個開源的 LoRaWAN 集中器守護程序，基於 Semtech 的硬體抽象層 (HAL) 所建構。它提供了一個基於 ZeroMQ 的 API，讓一個或多個應用程式可以與閘道硬體互動。 透過將硬體特定的實作與封裝放在單獨的守護程序中，並透過 ZeroMQ API 對外暴露，封包轉發應用程式能完全與閘道硬體解耦。這樣的架構也讓多個應用程式可以同時與閘道硬體互動。例如，多個封包轉發器可將資料分別轉發到不同的 LoRaWAN 網路伺服器。
 
-**ChirpStack Gateway Mesh** 是一款 **軟體組件**，可以運行在 **LoRa® 閘道器** 上，將這些閘道器轉換為 **兩種角色**：
+<figure><img src="../.gitbook/assets/截圖 2025-02-23 凌晨4.29.03.png" alt=""><figcaption></figcaption></figure>
 
-1. **Relay Gateway（中繼閘道器）**：
-   * 主要負責 **轉發 LoRaWAN 資料**（上行與下行）。
-   * 適用於無法直接連接網際網路的閘道器，通常為 **太陽能供電** 的遠端設備。
-2. **Border Gateway（邊界閘道器）**：
-   * 負責 **終止 Mesh 協議**，並與 **ChirpStack 伺服器** 直接通訊。
-   * 需要 **網際網路連接**，以處理來自 Relay Gateway 的 LoRaWAN 訊息。
+這意味著：
 
-<figure><img src="../.gitbook/assets/截圖 2025-02-15 清晨7.29.51.png" alt=""><figcaption><p><strong>ChirpStack Gateway Mesh 架構圖</strong></p></figcaption></figure>
+1. **多重伺服器支援**：一個 LoRaWAN 閘道器可以同時將數據傳輸到多個 ChirpStack 伺服器，而不需要為每個伺服器配置獨立的閘道器。
+2. **上行數據選擇性傳輸**：可以將某些伺服器設定為僅接收上行數據（上傳來自 LoRa 裝置的訊息），而不會發送下行數據（如 LoRaWAN 訊息或指令）。
+3. **適用於多平台架構**：若一個 LoRaWAN 網絡需要同時將數據發送到不同的應用或服務，這個多工器可以有效地管理流量，確保所有目標伺服器都能夠獲取相同的數據。
 
-***
+這樣的設計可提高數據靈活性，讓使用者能夠更有效地整合不同的 LoRaWAN 平台或數據處理系統。
 
-#### **ChirpStack Gateway Mesh 的目的**
-
-該組件的主要目標是 **擴展 LoRaWAN® 覆蓋範圍**，尤其適用於 **遠端地區** 或 **網際網路覆蓋不足** 的環境。
-
-* 在無法連接網際網路的地區，**Relay Gateway** 可以將 LoRaWAN 訊息轉發給 **Border Gateway**。
-* 這種 **中繼機制** 確保了即使裝置處於 **無網路環境**，也能透過 **LoRa 進行資料轉發**，直到訊息傳遞至 Border Gateway 並最終送達 **ChirpStack 伺服器**。
-* **與 LoRa 聯盟（LoRa Alliance） 的 Relay Protocol 不同**，此解決方案 **不需要修改裝置端的軟體**，因此更容易部署。
+#### **安裝與設定指南**
 
 ***
 
-#### **技術限制**
+### **步驟 1：啟用** Chirpstack Concerntatord 封包集中器
 
-1. **支援最多 8 個 Hops（跳點）**
-   * 第一個 Relay Gateway 被視為 **第 1 跳（Hop）**。
-   * 之後最多可有 **7 個額外的 Relay Gateway**。
-2. **受限於 LoRa 空中時間（Airtime）**
-   * 由於 Relay Gateway 需要接收並重新傳輸封包，因此空中時間（Airtime） 會影響中繼效果。
-   * 如果 Relay 過多，可能會導致網路擁塞，影響效能。
+1. 使用 **SSH** 登入您的 **Hotspot**。
 
-***
+<figure><img src="../.gitbook/assets/截圖 2025-02-12 上午8.35.21.png" alt=""><figcaption></figcaption></figure>
 
-#### **Relay Gateway（中繼閘道器）簡介**
+2.  設定 Chirpstack Concerntatord 封包集中器：
 
-Relay Gateway 是一種無需網際網路連接的 LoRaWAN 閘道器，常見硬體為 SX1301/2/3 系列（可選配 ISM2400 集中器模組）。\
-該設備可由太陽能供電，適合部署於偏遠或無電力基礎設施的環境中。
-
-***
-
-#### **Relay Gateway 的功能**
-
-**上行（Uplink）封包處理**
-
-* 接收來自 LoRaWAN 裝置的上行資料。
-* 將上行訊框封裝成 Mesh 格式。
-* 透過 Mesh 網路將封裝後的資料轉發至其他 Relay Gateway 或 Border Gateway。
-
-**下行（Downlink）封包處理**
-
-* 從 Border Gateway 或其他 Relay Gateway 接收 Mesh 格式下行訊框。
-* 解封 Mesh 封裝，取得原始 LoRaWAN 下行資料。
-* 將資料傳送至對應的 LoRaWAN 裝置。
-
-***
-
-#### **Relay Gateway 的特點**
-
-* 無需網際網路連線，適用於遠端或無網路基礎設施的場景。
-* 可由太陽能供電，適合偏遠地區長期運行。
-* 透過 ChirpStack Gateway Mesh 管理上行與下行資料的中繼傳輸。
-* 支援多跳傳輸（Multi-Hop），可在多個 Relay Gateway 間傳遞資料直至 Border Gateway。
-* 與 Border Gateway 的通訊可使用與終端裝置相同的無線頻段，或根據硬體能力與應用需求使用 ISM2400 頻段。
-
-***
-
-#### **Relay Gateway 的組件需求**
-
-在 Relay Gateway 上需安裝以下組件：
-
-* ChirpStack Concentratord
-* ChirpStack Gateway Mesh
-
-***
-
-Relay Gateway 作為 Mesh 網路中的中繼節點，能有效擴展 LoRaWAN 網路覆蓋範圍，實現無網路環境下的穩定通訊。
-
-#### 安裝與設定指南
-
-***
-
-**步驟 1：停止 Docker，關閉 ChirpStack LoRaWAN 服務**
-
-1. 使用 SSH 登入您的 Hotspot。
-2.  輸入以下指令以停用並停止 Docker 服務：
-
-    ```bash
-    /etc/init.d/dockerd disable
-    /etc/init.d/dockerd stop
+    {% code overflow="wrap" %}
+    ```sh
+    # 進入資料夾路徑
+    cd /etc/linxdot-opensource/chirpstack-software/chirpstack-concentratord-binary/config
+    # 刪除預設的 concentratord.toml 文件
+    rm concentratord.toml
+    # Create the new concentratord.toml
+    vi concentratord.toml
     ```
+    {% endcode %}
 
-***
+以下是新的 concentratord.toml 範例，您可以直接複製並使用 **vi 編輯器** 貼上到 **Hotspot** 的 concentratord.toml，然後儲存。
 
-**步驟 2：設定 ChirpStack Gateway Mesh**
+#### 步驟：
 
-1.  切換至設定目錄：
+1.  使用 **vi 編輯器** 開啟 concentratord.toml：
 
-    ```bash
-    cd /etc/linxdot-opensource/chirpstack-border-gateway/chirpstack-gateway-mesh-binary/config
+    ```sh
+    vi concentratord.toml
     ```
-2.  刪除舊設定檔並建立新檔案：
+2.  進入 **插入模式**（按下 `i`），然後貼上以下內容：
 
-    ```bash
-    rm chirpstack-gateway-mesh.toml
-    vi chirpstack-gateway-mesh.toml
+    ```yaml
+    # Concentratord configuration.
+    [concentratord]
+
+    # Log level.
+    #
+    # Valid options are:
+    #   * TRACE
+    #   * DEBUG
+    #   * INFO
+    #   * WARN
+    #   * ERROR
+    #   * OFF
+    log_level="INFO"
+
+    # Log to syslog.
+    #
+    # When set to true, log messages are being written to syslog instead of stdout.
+    log_to_syslog=false
+
+    # Statistics interval.
+    stats_interval="30s"
+
+      # Configuration for the (ZeroMQ based) API.
+      [concentratord.api]
+
+      # Event PUB socket bind.
+      event_bind="ipc:///tmp/concentratord_event"
+
+      # Command REP socket bind.
+      command_bind="ipc:///tmp/concentratord_command"
+
+
+    # LoRa gateway configuration.
+    [gateway]
+
+    # Antenna gain (dBi).
+    antenna_gain=0
+
+    # Public LoRaWAN network.
+    lorawan_public=false
+
+    # Region.
+    #
+    # The region of the gateway. Options:
+    #  EU868, US915, CN779, EU433, AU915, CN470, AS923, AS923_2, AS923_3, AS923_4,
+    #  KR923, IN865, RU864
+    #
+    # Not not all the gateway models implement all regions.
+    region="AS923"
+
+    # Gateway vendor / model.
+    #
+    # This configures various vendor and model specific settings like the min / max
+    # frequency, TX gain table.
+    model="linxdot_ld1002"
+
+    # Gateway vendor / model flags.
+    model_flags=[]
     ```
-3. 在 `vi` 編輯器中，按下 `i` 進入插入模式，將以下內容貼上並根據需求修改。
+3.  啟動服務：
 
-***
-
-**chirpstack-gateway-mesh.toml 配置範本**
-
-```toml
-[logging]
-level="INFO"            
-log_to_syslog=false     
-
-[mesh]
-signing_key="a08ed9e0cca290514071818786f9f9dd"  
-border_gateway=false                           
-max_hop_count=8                                
-border_gateway_ignore_direct_uplinks=false     
-
-frequencies=[                                  
-  923200000,
-  923400000,
-  923600000,
-  923800000,
-  924000000,
-  924200000,
-  924400000,
-  924600000,
-]
-
-tx_power=16                                    
-
-[mesh.data_rate]
-modulation="LORA"                              
-spreading_factor=7                             
-bandwidth=125000                               
-code_rate="4/5"                                
-
-[mesh.proxy_api]
-event_bind="ipc:///tmp/gateway_relay_event"
-command_bind="ipc:///tmp/gateway_relay_command"
-
-[backend]
-  [backend.concentratord]
-  event_url="ipc:///tmp/concentratord_event"
-  command_url="ipc:///tmp/concentratord_command"
-
-  [backend.mesh_concentratord]
-  event_url="ipc:///tmp/concentratord_event"
-  command_url="ipc:///tmp/concentratord_command"
-```
-
-4. 儲存並退出
-   * 按 `ESC`，輸入 `:wq` 後按 `Enter` 儲存檔案並退出。
-
-***
-
-**步驟 3：啟動服務**
-
-1.  回到專案根目錄並執行安裝腳本：
-
-    ```bash
+    ```sh
     cd /etc/linxdot-opensource
-    ./install-chirpstack-border-gateway-concentratord.sh
-    ./install-chirpstack-border-gateway-mesh.sh
+    ./install-chirpstack-concentratord.sh
     ```
-2.  檢查執行狀態\
-    查看 Concentratord 執行日誌以確保服務正常運作：
+4.  **查看執行日誌確認狀態**
+
+    持續查看 concentratord 執行日誌，確認運作是否正常：
 
     ```bash
     logread -f | grep concentratord
     ```
-
-***
-
-安裝與設定完成後，請確認 Gateway 已成功連線並可正常轉發 LoRaWAN 封包。\
-請務必修改 `signing_key` 為專屬安全金鑰以確保資料傳輸安全。
-
-***
-
