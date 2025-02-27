@@ -23,7 +23,7 @@
 * [Linxdot 安裝LoRaWAN服務(進階)](advanced/markdown-5/README.md)
   * [Linxdot 安裝Chirpstack Concerntatord 封包集中器](advanced/markdown-5/markdown.md)
   * [Linxdot 安裝 Chirpstack Gateway Mesh 並設定角色為 Relay（中繼閘道器）](advanced/markdown-5/markdown-1.md)
-  * [Linxdot 安裝 Chirpstack Gateway Mesh 並設定角色為 Border](advanced/markdown-5/markdown-2.md)
+  * [Linxdot 安裝 Chirpstack Gateway Mesh 並設定角色為 Border (邊界閘道器)](advanced/markdown-5/markdown-2.md)
 
 ## Q\&A
 
