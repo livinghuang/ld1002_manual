@@ -47,6 +47,8 @@ icon: hand-point-right
 Relay Gateway 是一種無需網際網路連接的 LoRaWAN 閘道器，常見硬體為 SX1301/2/3 系列（可選配 ISM2400 集中器模組）。\
 該設備可由太陽能供電，適合部署於偏遠或無電力基礎設施的環境中。
 
+<figure><img src="../../.gitbook/assets/截圖 2025-02-28 凌晨4.23.09.png" alt=""><figcaption></figcaption></figure>
+
 ***
 
 #### **Relay Gateway 的功能**
@@ -85,12 +87,6 @@ Relay Gateway 是一種無需網際網路連接的 LoRaWAN 閘道器，常見硬
 ***
 
 Relay Gateway 作為 Mesh 網路中的中繼節點，能有效擴展 LoRaWAN 網路覆蓋範圍，實現無網路環境下的穩定通訊。
-
-這是修訂後的 **安裝與設定指南**，讓內容更清晰、結構更完善：
-
-***
-
-這是修訂後的 **安裝與設定指南**，確保內容更清晰、易讀，並提供更完善的步驟說明：
 
 ***
 
