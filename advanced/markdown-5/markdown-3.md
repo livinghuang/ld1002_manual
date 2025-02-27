@@ -8,12 +8,12 @@ icon: hand-point-right
 
 ***
 
-## **在 Linxdot Hotspot 安裝 MQTT 轉發多工器**
+## **在 Linxdot Hotspot 安裝 MQTT** 封包轉發器
 
 本章將指導您如何在 **Linxdot Hotspot** 上安裝 **ChirpStack MQTT Forwarder**，它是一個 **MQTT 封包轉發器**，用於 LoRa 閘道器（Gateway）。\
 與 **ChirpStack Gateway Bridge** 不同，**ChirpStack MQTT Forwarder** **必須安裝在 LoRa 閘道器上**。
 
-<figure><img src="../../.gitbook/assets/截圖 2025-02-27 下午5.58.17.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/截圖 2025-02-28 凌晨4.42.06.png" alt=""><figcaption></figcaption></figure>
 
 #### **支援後端（Backends）**
 
@@ -22,9 +22,15 @@ icon: hand-point-right
 
 ***
 
-### **安裝與設定指南**
+## **安裝與設定指南：ChirpStack MQTT Forwarder**
 
-#### **步驟 1：使用 SSH 登入您的 Hotspot**
+本指南將引導您在 **Linxdot Hotspot** 上安裝與設定 **ChirpStack MQTT Forwarder**。\
+**ChirpStack MQTT Forwarder** 是一個 **MQTT 封包轉發器**，用於 LoRa 閘道器（Gateway），\
+負責將上行封包轉發到 MQTT Broker，以便 LoRaWAN 伺服器處理。
+
+***
+
+### **步驟 1：使用 SSH 登入您的 Hotspot**
 
 請確保您的 **Hotspot** 已連線至網路，然後使用 SSH 連接至設備：
 
@@ -34,7 +40,7 @@ ssh root@<HOTSPOT_IP>
 
 ***
 
-#### **步驟 2：下載並安裝 ChirpStack MQTT Forwarder**
+### **步驟 2：下載並安裝 ChirpStack MQTT Forwarder**
 
 執行以下指令下載並安裝 **ChirpStack MQTT Forwarder**：
 
@@ -45,7 +51,7 @@ cd awesome_linxdot
 ./install-chirpstack-mqtt-forwarder.sh [role]
 ```
 
-**注意：`[role]` 可選參數**
+#### **注意：`[role]` 可選參數**
 
 *   **一般模式（Normal Mode）**
 
@@ -57,6 +63,23 @@ cd awesome_linxdot
     ```sh
     ./install-chirpstack-mqtt-forwarder.sh border
     ```
+
+***
+
+### **確認 MQTT Forwarder 運行狀態**
+
+安裝完成後，您可以使用以下指令檢查 **MQTT Forwarder** 是否正常運行：
+
+```sh
+logread -f | grep mqtt
+```
+
+如果服務正在運行，您應該會看到類似的日誌輸出：
+
+```
+Thu Feb 27 20:52:25 2025 user.notice chirpstack-mqtt-forwarder: 2025-02-27T20:52:25.894Z INFO  [chirpstack_mqtt_forwarder::backend::concentratord] Received uplink frame, uplink_id: 269902156
+Thu Feb 27 20:52:25 2025 user.notice chirpstack-mqtt-forwarder: 2025-02-27T20:52:25.894Z INFO  [chirpstack_mqtt_forwarder::mqtt] Sending uplink event, uplink_id: 269902156, topic: as923/gateway//event/up
+```
 
 ***
 
@@ -78,7 +101,7 @@ vi chirpstack-software/chirpstack-mqtt-forwarder-binary/<設定檔>.toml
 
 ### **停止 ChirpStack MQTT Forwarder 服務**
 
-如果需要停止 **ChirpStack MQTT Forwarder**，請執行以下指令：
+如需停止 **ChirpStack MQTT Forwarder**，請執行以下指令：
 
 ```sh
 cd /opt/awesome_linxdot
@@ -92,4 +115,6 @@ cd /opt/awesome_linxdot
 如需進一步技術支援，請參閱：
 
 * [ChirpStack 官方支援頁面](https://www.chirpstack.io/)
+
+***
 
