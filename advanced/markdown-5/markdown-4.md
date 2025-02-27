@@ -11,7 +11,7 @@ icon: hand-point-right
 本章將指導您如何在 **Linxdot Hotspot** 上安裝 **ChirpStack UDP Forwarder**。\
 **ChirpStack UDP Forwarder** 是專為 **ChirpStack Concentratord** 設計的 **UDP 封包轉發器**，並與 **Semtech UDP 協議** 相容。
 
-<figure><img src="../../.gitbook/assets/截圖 2025-02-27 下午6.05.48.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/截圖 2025-02-28 凌晨4.41.07 (1).png" alt=""><figcaption></figcaption></figure>
 
 ***
 
