@@ -90,14 +90,20 @@ Relay Gateway 作為 Mesh 網路中的中繼節點，能有效擴展 LoRaWAN 網
 
 ***
 
-## **安裝與設定指南**
-
-本指南將引導您在 **Linxdot** 上安裝與設定 **ChirpStack Gateway Mesh（封包集中器）**，用於 **Relay（中繼閘道器）**。\
-請按照以下步驟完成安裝與配置。
+這是修訂後的 **安裝與設定指南**，確保內容更清晰、易讀，並提供更完善的步驟說明：
 
 ***
 
-### **步驟 1：使用 SSH 登入您的 Hotspot**
+## **在 Linxdot Hotspot 安裝 ChirpStack Gateway Mesh**
+
+本指南將指導您如何在 **Linxdot Hotspot** 上安裝與設定 **ChirpStack Gateway Mesh**，\
+**ChirpStack Gateway Mesh** 用於 **LoRa 中繼閘道器（Relay Gateway）**，支援 LoRaWAN 封包轉發。
+
+***
+
+### **安裝與設定指南**
+
+#### **步驟 1：使用 SSH 登入您的 Hotspot**
 
 請確保您的 **Hotspot** 已連線至網路，然後使用 SSH 連接至設備：
 
@@ -107,7 +113,7 @@ ssh root@<HOTSPOT_IP>
 
 ***
 
-### **步驟 2：下載並安裝 ChirpStack Gateway Mesh**
+#### **步驟 2：下載並安裝 ChirpStack Gateway Mesh**
 
 執行以下指令下載並安裝 **ChirpStack Gateway Mesh**：
 
@@ -118,7 +124,20 @@ cd awesome_linxdot
 ./install-chirpstack-gateway-mesh.sh relay as923
 ```
 
-**注意：** `as923` 代表使用 **AS923 頻段**，如果您的網路使用其他頻段，請根據需求替換。
+**注意：** `as923` 代表使用 **AS923 頻段**，如果您的網路使用其他頻段，請根據需求替換，例如：
+
+*   **EU868 頻段**
+
+    ```sh
+    ./install-chirpstack-gateway-mesh.sh relay eu868
+    ```
+*   **US915 頻段**
+
+    ```sh
+    ./install-chirpstack-gateway-mesh.sh relay us915
+    ```
+
+***
 
 ### **確認 ChirpStack Gateway Mesh 運行狀態**
 
@@ -128,10 +147,10 @@ cd awesome_linxdot
 service list
 ```
 
-如果安裝成功，您應該會看到以下類似輸出：
+如果安裝成功，您應該會看到類似的輸出：
 
 ```sh
-/etc/init.d/linxdot-chirpstack-gateway-mesh	   enabled	   running
+/etc/init.d/linxdot-chirpstack-gateway-mesh enabled running
 ```
 
 您也可以使用以下指令查看運行中的 **LoRa 封包數據**：
@@ -140,21 +159,19 @@ service list
 logread -f | grep mesh
 ```
 
-當 LoRaWAN 封包被接收時，應該會看到類似以下的日誌輸出：
+當 **LoRaWAN 封包被接收時**，應該會看到類似以下的日誌輸出：
 
 ```
-
 Thu Feb 27 20:18:10 2025 user.notice chirpstack-gateway-mesh: 2025-02-27T20:18:10.622Z INFO  [chirpstack_gateway_mesh::backend] Frame received - [uplink_id: 2494328473, freq: 924200000, rssi: -36, snr: 12.5, mod: [LORA - sf: 12, bw: 125000]]
 Thu Feb 27 20:18:10 2025 user.notice chirpstack-gateway-mesh: 2025-02-27T20:18:10.622Z INFO  [chirpstack_gateway_mesh::mesh] Proxying LoRaWAN uplink, uplink: [uplink_id: 2494328473, freq: 924200000, rssi: -36, snr: 12.5, mod: [LORA - sf: 12, bw: 125000]]
 Thu Feb 27 20:18:10 2025 user.notice chirpstack-gateway-mesh: 2025-02-27T20:18:10.622Z INFO  [chirpstack_gateway_mesh::proxy] Sending uplink event - [uplink_id: 2494328473, freq: 924200000, rssi: -36, snr: 12.5, mod: [LORA - sf: 12, bw: 125000]]
-
 ```
 
 ***
 
 ### **設定 ChirpStack Gateway Mesh**
 
-您可以修改設定檔來調整 Gateway Mesh 的運行參數：
+您可以修改設定檔來調整 **ChirpStack Gateway Mesh** 的運行參數：
 
 ```sh
 vi chirpstack-software/chirpstack-gateway-mesh-binary/config/<設定檔>.toml
@@ -165,8 +182,6 @@ vi chirpstack-software/chirpstack-gateway-mesh-binary/config/<設定檔>.toml
 * 按 **`i`** 進入編輯模式
 * 修改完成後，按 **`Esc`** 退出編輯模式
 * 輸入 **`:wq`** 保存並退出
-
-
 
 ***
 
@@ -196,6 +211,8 @@ cd /opt/awesome_linxdot
 如需進一步技術支援，請參閱：
 
 * [ChirpStack 官方支援頁面](https://www.chirpstack.io/)
+
+***
 
 ***
 
