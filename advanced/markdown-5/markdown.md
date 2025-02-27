@@ -8,7 +8,7 @@ icon: hand-point-right
 
 ChirpStack Concentratord 是一個開源的 LoRaWAN 集中器守護程序，基於 Semtech 的硬體抽象層 (HAL) 所建構。它提供了一個基於 ZeroMQ 的 API，讓一個或多個應用程式可以與閘道硬體互動。 透過將硬體特定的實作與封裝放在單獨的守護程序中，並透過 ZeroMQ API 對外暴露，封包轉發應用程式能完全與閘道硬體解耦。這樣的架構也讓多個應用程式可以同時與閘道硬體互動。例如，多個封包轉發器可將資料分別轉發到不同的 LoRaWAN 網路伺服器。
 
-<figure><img src="../../.gitbook/assets/截圖 2025-02-23 凌晨4.29.03.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/截圖 2025-02-28 凌晨3.47.12.png" alt=""><figcaption></figcaption></figure>
 
 這意味著：
 
@@ -52,6 +52,40 @@ cd awesome_linxdot
 
 ***
 
+After install chirpstack-concentratord , you could use below command to check it&#x20;
+
+```
+service list
+```
+
+**Next Step : Get the gateway-id, Chirpstack concentratord is a program to operate the Lora  module SX1262 which inside of Linxdot machine. You will need to get the uni gateway id to setup it in the lorawan network server.**&#x20;
+
+**step1 : open your browser**
+
+**access : lindox.ip:80**&#x20;
+
+**in the navigation column , you could find the "儀表板"->"狀態"-> "awesome linxdot"**&#x20;
+
+&#x20;**you could find the gateway id . save it it will use on later you register it into your chirpstacke or the other gate loarawan network server like TTN.**
+
+**you should found something like this**&#x20;
+
+/etc/init.d/linxdot-chirpstack-concentratord enabled running
+
+you could check the status&#x20;
+
+logread -f | grep concentratord
+
+you could found the some packet frame like this
+
+Thu Feb 27 19:57:43 2025 user.notice chirpstack-concentratord: 2025-02-27T19:57:43.147Z INFO  \[chirpstack\_concentratord\_sx1302::handler::uplink] Frame received, uplink\_id: 1073536733, count\_us: 3844463833, freq: 923600000, bw: 125000, mod: LoRa, dr: SF12, ftime\_received: false, ftime\_ns: 0
+
+Thu Feb 27 19:57:43 2025 user.notice chirpstack-mqtt-forwarder: 2025-02-27T19:57:43.149Z INFO  \[chirpstack\_mqtt\_forwarder::backend::concentratord] Received uplink frame, uplink\_id: 1073536733
+
+Thu Feb 27 19:57:44 2025 user.notice chirpstack-concentratord: 2025-02-27T19:57:44.944Z INFO  \[chirpstack\_concentratord\_sx1302::handler::uplink] Frame received, uplink\_id: 3481726670, count\_us: 3846260724, freq: 924600000, bw: 125000, mod: LoRa, dr: SF12, ftime\_received: false, ftime\_ns: 0
+
+
+
 ### **設定 ChirpStack Concentratord**
 
 您可以在 **`chirpstack-software/chirpstack-concentratord-binary/config`** 修改 **ChirpStack Concentratord** 的設定。
@@ -84,7 +118,9 @@ cd awesome_linxdot
 
 ***
 
-### **停止 ChirpStack Concentratord 服務**
+
+
+**停止 ChirpStack Concentratord 服務**
 
 如果需要停止 **ChirpStack Concentratord**，請執行以下指令：
 
