@@ -46,6 +46,8 @@ icon: hand-point-right
 
 Border Gateway 是 **具備網際網路連接功能** 的 LoRaWAN 閘道器，可處理 Mesh 封裝的 LoRaWAN 負載資料。
 
+<figure><img src="../../.gitbook/assets/截圖 2025-02-28 凌晨4.27.47.png" alt=""><figcaption></figcaption></figure>
+
 ***
 
 #### **Border Gateway 的功能**
@@ -70,13 +72,11 @@ Border Gateway 是 **具備網際網路連接功能** 的 LoRaWAN 閘道器，�
 * **處理 Mesh 封裝與解封**，確保 Mesh 網路中的資料可正確傳遞至 ChirpStack。
 * **保留上下文資訊**，確保上行與下行傳輸過程中，Mesh 特定資料能正確匹配。
 
-這是修訂後的 **安裝與設定指南**，讓內容更清晰、結構更完善：
-
 ***
 
-## **安裝與設定指南**
+## **在 Linxdot 安裝與設定 ChirpStack Gateway Mesh（邊界閘道器）**
 
-本指南將引導您在 **Linxdot** 上安裝與設定 **ChirpStack Gateway Mesh（封包集中器）**，用於 Borde&#x72;**（邊界閘道器）**。\
+本指南將引導您在 **Linxdot** 上安裝與設定 **ChirpStack Gateway Mesh（封包集中器）**，用於 **Border（邊界閘道器）**。\
 請按照以下步驟完成安裝與配置。
 
 ***
@@ -102,13 +102,54 @@ cd awesome_linxdot
 ./install-chirpstack-gateway-mesh.sh border as923
 ```
 
-**注意：** `as923` 代表使用 **AS923 頻段**，如果您的網路使用其他頻段，請根據需求替換。
+**注意：** `as923` 代表使用 **AS923 頻段**，如果您的網路使用其他頻段，請根據需求替換，例如：
+
+*   **EU868 頻段**
+
+    ```sh
+    ./install-chirpstack-gateway-mesh.sh border eu868
+    ```
+*   **US915 頻段**
+
+    ```sh
+    ./install-chirpstack-gateway-mesh.sh border us915
+    ```
+
+***
+
+### **確認 ChirpStack Gateway Mesh 運行狀態**
+
+安裝完成後，您可以使用以下指令檢查 **ChirpStack Gateway Mesh** 是否運行：
+
+```sh
+service list
+```
+
+如果安裝成功，您應該會看到類似的輸出：
+
+```sh
+/etc/init.d/linxdot-chirpstack-gateway-mesh enabled running
+```
+
+您也可以使用以下指令查看運行中的 **LoRa 封包數據**：
+
+```sh
+logread -f | grep mesh
+```
+
+當 **LoRaWAN 封包被接收時**，應該會看到類似以下的日誌輸出：
+
+```
+Thu Feb 27 20:18:10 2025 user.notice chirpstack-gateway-mesh: 2025-02-27T20:18:10.622Z INFO  [chirpstack_gateway_mesh::backend] Frame received - [uplink_id: 2494328473, freq: 924200000, rssi: -36, snr: 12.5, mod: [LORA - sf: 12, bw: 125000]]
+Thu Feb 27 20:18:10 2025 user.notice chirpstack-gateway-mesh: 2025-02-27T20:18:10.622Z INFO  [chirpstack_gateway_mesh::mesh] Proxying LoRaWAN uplink, uplink: [uplink_id: 2494328473, freq: 924200000, rssi: -36, snr: 12.5, mod: [LORA - sf: 12, bw: 125000]]
+Thu Feb 27 20:18:10 2025 user.notice chirpstack-gateway-mesh: 2025-02-27T20:18:10.622Z INFO  [chirpstack_gateway_mesh::proxy] Sending uplink event - [uplink_id: 2494328473, freq: 924200000, rssi: -36, snr: 12.5, mod: [LORA - sf: 12, bw: 125000]]
+```
 
 ***
 
 ### **設定 ChirpStack Gateway Mesh**
 
-您可以修改設定檔來調整 Gateway Mesh 的運行參數：
+您可以修改設定檔來調整 **ChirpStack Gateway Mesh** 的運行參數：
 
 ```sh
 vi chirpstack-software/chirpstack-gateway-mesh-binary/config/<設定檔>.toml
@@ -148,6 +189,8 @@ cd /opt/awesome_linxdot
 如需進一步技術支援，請參閱：
 
 * [ChirpStack 官方支援頁面](https://www.chirpstack.io/)
+
+***
 
 ***
 
