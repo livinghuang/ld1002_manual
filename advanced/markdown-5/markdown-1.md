@@ -120,6 +120,36 @@ cd awesome_linxdot
 
 **注意：** `as923` 代表使用 **AS923 頻段**，如果您的網路使用其他頻段，請根據需求替換。
 
+### **確認 ChirpStack Gateway Mesh 運行狀態**
+
+安裝完成後，您可以使用以下指令檢查 **ChirpStack Gateway Mesh** 是否運行：
+
+```sh
+service list
+```
+
+如果安裝成功，您應該會看到以下類似輸出：
+
+```sh
+/etc/init.d/linxdot-chirpstack-gateway-mesh	   enabled	   running
+```
+
+您也可以使用以下指令查看運行中的 **LoRa 封包數據**：
+
+```sh
+logread -f | grep mesh
+```
+
+當 LoRaWAN 封包被接收時，應該會看到類似以下的日誌輸出：
+
+```
+
+Thu Feb 27 20:18:10 2025 user.notice chirpstack-gateway-mesh: 2025-02-27T20:18:10.622Z INFO  [chirpstack_gateway_mesh::backend] Frame received - [uplink_id: 2494328473, freq: 924200000, rssi: -36, snr: 12.5, mod: [LORA - sf: 12, bw: 125000]]
+Thu Feb 27 20:18:10 2025 user.notice chirpstack-gateway-mesh: 2025-02-27T20:18:10.622Z INFO  [chirpstack_gateway_mesh::mesh] Proxying LoRaWAN uplink, uplink: [uplink_id: 2494328473, freq: 924200000, rssi: -36, snr: 12.5, mod: [LORA - sf: 12, bw: 125000]]
+Thu Feb 27 20:18:10 2025 user.notice chirpstack-gateway-mesh: 2025-02-27T20:18:10.622Z INFO  [chirpstack_gateway_mesh::proxy] Sending uplink event - [uplink_id: 2494328473, freq: 924200000, rssi: -36, snr: 12.5, mod: [LORA - sf: 12, bw: 125000]]
+
+```
+
 ***
 
 ### **設定 ChirpStack Gateway Mesh**
@@ -135,6 +165,8 @@ vi chirpstack-software/chirpstack-gateway-mesh-binary/config/<設定檔>.toml
 * 按 **`i`** 進入編輯模式
 * 修改完成後，按 **`Esc`** 退出編輯模式
 * 輸入 **`:wq`** 保存並退出
+
+
 
 ***
 
