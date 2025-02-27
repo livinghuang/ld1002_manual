@@ -17,7 +17,7 @@ icon: hand-point-right
    * 負責 **終止 Mesh 協議**，並與 **ChirpStack 伺服器** 直接通訊。
    * 需要 **網際網路連接**，以處理來自 Relay Gateway 的 LoRaWAN 訊息。
 
-<figure><img src="../.gitbook/assets/截圖 2025-02-15 清晨7.29.51.png" alt=""><figcaption><p><strong>ChirpStack Gateway Mesh 架構圖</strong></p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/截圖 2025-02-15 清晨7.29.51.png" alt=""><figcaption><p><strong>ChirpStack Gateway Mesh 架構圖</strong></p></figcaption></figure>
 
 ***
 

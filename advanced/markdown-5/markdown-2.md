@@ -17,7 +17,7 @@ icon: hand-point-right
    * 負責 **終止 Mesh 協議**，並與 **ChirpStack 伺服器** 直接通訊。
    * 需要 **網際網路連接**，以處理來自 Relay Gateway 的 LoRaWAN 訊息。
 
-<figure><img src="../.gitbook/assets/截圖 2025-02-15 清晨7.29.51.png" alt=""><figcaption><p><strong>ChirpStack Gateway Mesh 架構圖</strong></p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/截圖 2025-02-15 清晨7.29.51.png" alt=""><figcaption><p><strong>ChirpStack Gateway Mesh 架構圖</strong></p></figcaption></figure>
 
 ***
 
@@ -78,7 +78,7 @@ Border Gateway 是 **具備網際網路連接功能** 的 LoRaWAN 閘道器，�
 
 1. 使用 **SSH** 登入您的 **Hotspot**。
 
-<figure><img src="../.gitbook/assets/截圖 2025-02-12 上午8.35.21.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/截圖 2025-02-12 上午8.35.21.png" alt=""><figcaption></figcaption></figure>
 
 2.  現在進入資料夾路徑：
 
@@ -546,7 +546,7 @@ Border Gateway 是 **具備網際網路連接功能** 的 LoRaWAN 閘道器，�
     ```
 10. 在LoRaWAN Server 設定 Gateway
 
-<figure><img src="../.gitbook/assets/截圖 2025-02-21 清晨7.03.17.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/截圖 2025-02-21 清晨7.03.17.png" alt=""><figcaption></figcaption></figure>
 
 
 

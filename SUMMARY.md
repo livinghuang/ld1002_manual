@@ -18,12 +18,12 @@
 * [設定LOG檔案大小](advanced/markdown.md)
 * [設定Internal LoRaWAN Gateway Package Forwarder](advanced/markdown-1.md)
 * [Linxdot 韌體重刷指南](advanced/markdown-2.md)
-* [Linxdot 安裝LoRaWAN服務](advanced/markdown-3.md)
+* [Linxdot 安裝LoRaWAN服務(基本做法)](advanced/markdown-3.md)
 * [Linxdot 安裝封包轉發多工器](advanced/markdown-4.md)
-* [Linxdot 安裝LoRaWAN採用服務集中器方法](advanced/markdown-5.md)
-* [Linxdot 安裝Chirpstack Concerntatord 封包集中器](advanced/markdown-6.md)
-* [Linxdot 安裝 Chirpstack Gateway Mesh 並設定角色為 Relay（中繼閘道器）](advanced/markdown-7.md)
-* [Linxdot 安裝 Chirpstack Gateway Mesh 並設定角色為 Border](advanced/markdown-8.md)
+* [Linxdot 安裝LoRaWAN服務(進階)](advanced/markdown-5/README.md)
+  * [Linxdot 安裝Chirpstack Concerntatord 封包集中器](advanced/markdown-5/markdown.md)
+  * [Linxdot 安裝 Chirpstack Gateway Mesh 並設定角色為 Relay（中繼閘道器）](advanced/markdown-5/markdown-1.md)
+  * [Linxdot 安裝 Chirpstack Gateway Mesh 並設定角色為 Border](advanced/markdown-5/markdown-2.md)
 
 ## Q\&A
 
