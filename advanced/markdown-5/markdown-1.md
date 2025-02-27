@@ -86,110 +86,84 @@ Relay Gateway 是一種無需網際網路連接的 LoRaWAN 閘道器，常見硬
 
 Relay Gateway 作為 Mesh 網路中的中繼節點，能有效擴展 LoRaWAN 網路覆蓋範圍，實現無網路環境下的穩定通訊。
 
-#### 安裝與設定指南
+這是修訂後的 **安裝與設定指南**，讓內容更清晰、結構更完善：
 
 ***
 
-**步驟 1：停止 Docker，關閉 ChirpStack LoRaWAN 服務**
+## **安裝與設定指南**
 
-1. 使用 SSH 登入您的 Hotspot。
-2.  輸入以下指令以停用並停止 Docker 服務：
-
-    ```bash
-    /etc/init.d/dockerd disable
-    /etc/init.d/dockerd stop
-    ```
+本指南將引導您在 **Linxdot** 上安裝與設定 **ChirpStack Gateway Mesh（封包集中器）**，用於 **Relay（中繼閘道器）**。\
+請按照以下步驟完成安裝與配置。
 
 ***
 
-**步驟 2：設定 ChirpStack Gateway Mesh**
+### **步驟 1：使用 SSH 登入您的 Hotspot**
 
-1.  切換至設定目錄：
+請確保您的 **Hotspot** 已連線至網路，然後使用 SSH 連接至設備：
 
-    ```bash
-    cd /etc/linxdot-opensource/chirpstack-border-gateway/chirpstack-gateway-mesh-binary/config
-    ```
-2.  刪除舊設定檔並建立新檔案：
-
-    ```bash
-    rm chirpstack-gateway-mesh.toml
-    vi chirpstack-gateway-mesh.toml
-    ```
-3. 在 `vi` 編輯器中，按下 `i` 進入插入模式，將以下內容貼上並根據需求修改。
-
-***
-
-**chirpstack-gateway-mesh.toml 配置範本**
-
-```toml
-[logging]
-level="INFO"            
-log_to_syslog=false     
-
-[mesh]
-signing_key="a08ed9e0cca290514071818786f9f9dd"  
-border_gateway=false                           
-max_hop_count=8                                
-border_gateway_ignore_direct_uplinks=false     
-
-frequencies=[                                  
-  923200000,
-  923400000,
-  923600000,
-  923800000,
-  924000000,
-  924200000,
-  924400000,
-  924600000,
-]
-
-tx_power=16                                    
-
-[mesh.data_rate]
-modulation="LORA"                              
-spreading_factor=7                             
-bandwidth=125000                               
-code_rate="4/5"                                
-
-[mesh.proxy_api]
-event_bind="ipc:///tmp/gateway_relay_event"
-command_bind="ipc:///tmp/gateway_relay_command"
-
-[backend]
-  [backend.concentratord]
-  event_url="ipc:///tmp/concentratord_event"
-  command_url="ipc:///tmp/concentratord_command"
-
-  [backend.mesh_concentratord]
-  event_url="ipc:///tmp/concentratord_event"
-  command_url="ipc:///tmp/concentratord_command"
+```sh
+ssh root@<HOTSPOT_IP>
 ```
 
-4. 儲存並退出
-   * 按 `ESC`，輸入 `:wq` 後按 `Enter` 儲存檔案並退出。
+***
+
+### **步驟 2：下載並安裝 ChirpStack Gateway Mesh**
+
+執行以下指令下載並安裝 **ChirpStack Gateway Mesh**：
+
+```sh
+cd /opt
+git clone https://github.com/livinghuang/awesome_linxdot.git
+cd awesome_linxdot
+./install-chirpstack-gateway-mesh.sh relay as923
+```
+
+**注意：** `as923` 代表使用 **AS923 頻段**，如果您的網路使用其他頻段，請根據需求替換。
 
 ***
 
-**步驟 3：啟動服務**
+### **設定 ChirpStack Gateway Mesh**
 
-1.  回到專案根目錄並執行安裝腳本：
+您可以修改設定檔來調整 Gateway Mesh 的運行參數：
 
-    ```bash
-    cd /etc/linxdot-opensource
-    ./install-chirpstack-border-gateway-concentratord.sh
-    ./install-chirpstack-border-gateway-mesh.sh
-    ```
-2.  檢查執行狀態\
-    查看 Concentratord 執行日誌以確保服務正常運作：
+```sh
+vi chirpstack-software/chirpstack-gateway-mesh-binary/config/<設定檔>.toml
+```
 
-    ```bash
-    logread -f | grep concentratord
-    ```
+**在 `vi` 編輯器中：**
+
+* 按 **`i`** 進入編輯模式
+* 修改完成後，按 **`Esc`** 退出編輯模式
+* 輸入 **`:wq`** 保存並退出
 
 ***
 
-安裝與設定完成後，請確認 Gateway 已成功連線並可正常轉發 LoRaWAN 封包。\
-請務必修改 `signing_key` 為專屬安全金鑰以確保資料傳輸安全。
+### **重新安裝 ChirpStack Gateway Mesh**
+
+如果需要切換至不同頻段（例如 **EU868**），請執行：
+
+```sh
+./install-chirpstack-gateway-mesh.sh relay eu868
+```
+
+***
+
+### **停止 ChirpStack Gateway Mesh 服務**
+
+如需停止 **ChirpStack Gateway Mesh**，請執行以下指令：
+
+```sh
+cd /opt/awesome_linxdot
+./stop_and_remove_chirpstack_gateway_mesh.sh
+```
+
+***
+
+### **進階支援**
+
+如需進一步技術支援，請參閱：
+
+* [ChirpStack 官方支援頁面](https://www.chirpstack.io/)
 
 ***
 
