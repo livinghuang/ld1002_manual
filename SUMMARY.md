@@ -29,7 +29,7 @@
 
 ***
 
-* [Copy of Linxdot 安裝封包轉發多工器](markdown.md)
+* [安裝Chirpstack Device Activator 註冊及啟用器](markdown.md)
 
 ## Q\&A
 
