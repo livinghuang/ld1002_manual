@@ -30,6 +30,7 @@
 ***
 
 * [安裝Chirpstack Device Activator 註冊及啟用器](markdown.md)
+* [停用 Watchcat 自動重啟功能（避免不正常重啟）](markdown-1.md)
 
 ## Q\&A
 
