@@ -43,23 +43,26 @@ Linxdot 機器（OpenWrt）**無法連外上網**，但你的 Windows 電腦可�
 
 ### 三、登入 Linxdot 並執行 Watchdog 腳本
 
-1.  進入 `/opt/awesome_linxdot-main` 目錄：
+1.  登入：
 
-    ```sh
-    cd /opt/awesome_linxdot-main/awesome-software/backup_log
-    ```
-2.  賦予腳本執行權限：
+    <pre class="language-sh"><code class="lang-sh"><strong>ssh root@192.168.1.100
+    </strong></code></pre>
+2.  進入 `/opt/awesome_linxdot-main` 目錄：
+
+    <pre class="language-sh"><code class="lang-sh"><strong>cd /opt/awesome_linxdot-main/awesome-software/backup_log
+    </strong></code></pre>
+3.  賦予腳本執行權限：
 
     ```sh
     chmod +x backup_log_install.sh
     chmod +x backup_log_uninstall.sh
     ```
-3.  執行 Watchdog 腳本：
+4.  執行 Watchdog 腳本：
 
     ```sh
     ./backup_log_install.sh
     ```
-4. 依照畫面提示完成 Watchdog 設定
+5. 依照畫面提示完成 Watchdog 設定
 
 ***
 
