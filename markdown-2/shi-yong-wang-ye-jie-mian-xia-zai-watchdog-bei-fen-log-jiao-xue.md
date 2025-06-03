@@ -9,11 +9,15 @@
 1. 請在瀏覽器輸入 Linxdot 的 IP 位址（預設為 `http://192.168.1.100`，請依照你自己的 IP 調整）。
 2. 登入帳號（通常是 `root`），輸入密碼。
 
+<figure><img src="../.gitbook/assets/截圖 2025-06-04 清晨6.07.39.png" alt=""><figcaption></figcaption></figure>
+
 ***
 
 ### 步驟二、進入「系統」>「備份/燒錄韌體」
 
 1. 網頁左側選單，點選【系統】 > 【備份/燒錄韌體】
+
+<figure><img src="../.gitbook/assets/截圖 2025-06-04 清晨6.08.26.png" alt=""><figcaption></figcaption></figure>
 
 ***
 
@@ -22,6 +26,8 @@
 1. 在頁面上方找到【組態】這個分頁。
 2. 點選【組態】。
 
+<figure><img src="../.gitbook/assets/截圖 2025-06-04 清晨6.09.36.png" alt=""><figcaption></figcaption></figure>
+
 ***
 
 ### 步驟四、指定備份目錄
@@ -29,19 +35,18 @@
 1. 捲動頁面到底部，你會看到「附加檔案」或類似的輸入框。
 2. 在輸入框內填入 `/root/`\
    （這是我們預設備份 log 檔案存放的資料夾）
+3. 按下【儲存】。
+
+<figure><img src="../.gitbook/assets/截圖 2025-06-04 清晨6.10.29 (1).png" alt=""><figcaption></figcaption></figure>
 
 ***
 
-### 步驟五、儲存設定
-
-1. 按下【儲存】。
-
-***
-
-### 步驟六、下載備份 Log
+### 步驟五、下載備份&#x20;
 
 1. 切換到【動作】分頁。
 2. 點選「製作壓縮檔」，系統會自動將【組態】 設定的所有目錄下的檔案打包並下載到你的電腦。
+
+<figure><img src="../.gitbook/assets/截圖 2025-06-04 清晨6.14.26.png" alt=""><figcaption></figcaption></figure>
 
 ***
 
@@ -62,5 +67,3 @@
 * 若有任何問題，請截圖回報錯誤畫面，我們會協助你排除。
 
 ***
-
-如要將此內容加入 GitBook，只要複製這段 markdown 即可。如果還需要配圖或要補充更多 GUI 指引（像是加上網頁截圖、操作按鈕說明），可再告知！
