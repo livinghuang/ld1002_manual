@@ -31,7 +31,8 @@
 
 * [安裝Chirpstack Device Activator 註冊及啟用器](markdown.md)
 * [停用 Watchcat 自動重啟功能（避免不正常重啟）](markdown-1.md)
-* [Linxdot Watchdog 工具包安裝教學（Windows 版本）](markdown-2.md)
+* [Linxdot Watchdog 工具包安裝教學（Windows 版本）](markdown-2/README.md)
+  * [使用網頁介面下載 Watchdog 備份 Log 教學](markdown-2/shi-yong-wang-ye-jie-mian-xia-zai-watchdog-bei-fen-log-jiao-xue.md)
 
 ## Q\&A
 
