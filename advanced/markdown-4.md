@@ -2,240 +2,97 @@
 icon: hand-point-right
 ---
 
-# Linxdot 安裝封包轉發多工器
+# Linxdot 安裝LoRaWAN服務
 
-#### **本章將引導您在 Linxdot Hotspot 安裝** 封包轉發多工器
+#### **本章將引導您在 Linxdot Hotspot 安裝 LoRaWAN 服務**
 
-封包轉發多工器 允許使用 **Semtech UDP packet-forwarder** 協議的閘道器同時連接到多個伺服器，並且可以選擇將某些伺服器標記為**僅上行 (uplink only)**。
+如果您 **重新刷機（Reflash）您的 Hotspot**，**LoRaWAN 服務可能不會自動安裝**，因此需要手動重新安裝。請按照以下步驟完成安裝。
 
-這意味著：
-
-1. **多重伺服器支援**：一個 LoRaWAN 閘道器可以同時將數據傳輸到多個 ChirpStack 伺服器，而不需要為每個伺服器配置獨立的閘道器。
-2. **上行數據選擇性傳輸**：可以將某些伺服器設定為僅接收上行數據（上傳來自 LoRa 裝置的訊息），而不會發送下行數據（如 LoRaWAN 訊息或指令）。
-3. **適用於多平台架構**：若一個 LoRaWAN 網絡需要同時將數據發送到不同的應用或服務，這個多工器可以有效地管理流量，確保所有目標伺服器都能夠獲取相同的數據。
-
-這樣的設計可提高數據靈活性，讓使用者能夠更有效地整合不同的 LoRaWAN 平台或數據處理系統。
-
-#### **安裝與設定指南**
+#### **安裝與 LoRaWAN 設定指南**
 
 ***
 
-### **步驟 1：安裝 ChirpStack LoRaWAN** 封包轉發多工器
+### **步驟 1：安裝 ChirpStack LoRaWAN 服務器**
 
-1. 使用 **SSH** 登入您的 **Hotspot**。
-
-<figure><img src="../.gitbook/assets/截圖 2025-02-12 上午8.35.21.png" alt=""><figcaption></figcaption></figure>
-
-2.  現在進入資料夾路徑：
-
-    {% code overflow="wrap" %}
-    ```sh
-    # 進入資料夾路徑
-    cd /mnt/opensource-system/chirpstack-docker
-    # 刪除預設的 docker-compose.yml 文件
-    rm docker-compose.yml
-    # Create the new docker-compose.yml
-    vi docker-compose.yml
-    ```
-    {% endcode %}
-
-以下是新的 `docker-compose.yml` 範例，您可以直接複製並使用 **vi 編輯器** 貼上到 **Hotspot** 的 `docker-compose.yml`，然後儲存。
-
-#### 步驟：
-
-1.  使用 **vi 編輯器** 開啟 `docker-compose.yml`：
+1. **開啟終端機（Terminal）**
+2.  **進入 Linxdot 開源工具目錄**：
 
     ```sh
-    vi docker-compose.yml
+    cd /etc/linxdot-opensource/
     ```
-2.  進入 **插入模式**（按下 `i`），然後貼上以下內容：
-
-    ```yaml
-    version: "3"
-
-    services:
-      chirpstack:
-        image: chirpstack/chirpstack:4
-        command: -c /etc/chirpstack
-        restart: unless-stopped
-        volumes:
-          - ./configuration/chirpstack:/etc/chirpstack
-          - ./lorawan-devices:/opt/lorawan-devices
-        depends_on:
-          - postgres
-          - mosquitto
-          - redis
-        environment:
-          - MQTT_BROKER_HOST=mosquitto
-          - REDIS_HOST=redis
-          - POSTGRESQL_HOST=postgres
-        ports:
-          - 8080:8080
-        logging:
-          driver: "json-file"
-          options:
-            max-size: "10m"
-            max-file: "3"
-
-      chirpstack-gateway-bridge-as923:
-        image: chirpstack/chirpstack-gateway-bridge:4
-        restart: unless-stopped
-        ports:
-          - 1701:1700/udp  # Changed to 1701 to avoid conflict with multiplexer
-        volumes:
-          - ./configuration/chirpstack-gateway-bridge:/etc/chirpstack-gateway-bridge
-        environment:
-          - INTEGRATION__MQTT__EVENT_TOPIC_TEMPLATE=as923/gateway/{{ .GatewayID }}/event/{{ .EventType }}
-          - INTEGRATION__MQTT__STATE_TOPIC_TEMPLATE=as923/gateway/{{ .GatewayID }}/state/{{ .StateType }}
-          - INTEGRATION__MQTT__COMMAND_TOPIC_TEMPLATE=as923/gateway/{{ .GatewayID }}/command/#
-        depends_on:
-          - mosquitto
-        logging:
-          driver: "json-file"
-          options:
-            max-size: "10m"
-            max-file: "3"
-      
-      chirpstack-gateway-bridge-basicstation:
-        image: chirpstack/chirpstack-gateway-bridge:4
-        restart: unless-stopped
-        command: -c /etc/chirpstack-gateway-bridge/chirpstack-gateway-bridge-basicstation-as923.toml
-        ports:
-          - 3001:3001
-        volumes:
-          - ./configuration/chirpstack-gateway-bridge:/etc/chirpstack-gateway-bridge
-        depends_on:
-          - mosquitto
-        logging:
-          driver: "json-file"
-          options:
-            max-size: "10m"
-            max-file: "3"
-
-      chirpstack-rest-api:
-        image: chirpstack/chirpstack-rest-api:4
-        restart: unless-stopped
-        command: --server chirpstack:8080 --bind 0.0.0.0:8090 --insecure
-        ports:
-          - 8090:8090
-        depends_on:
-          - chirpstack
-        logging:
-          driver: "json-file"
-          options:
-            max-size: "10m"
-            max-file: "3"
-
-      chirpstack-packet-multiplexer:
-        image: chirpstack/chirpstack-packet-multiplexer:4.0.0-test.2
-        restart: unless-stopped
-        command: -c /etc/chirpstack-packet-multiplexer/chirpstack-packet-multiplexer.toml
-        ports:
-          - 1700:1700/udp  # This service handles the gateway traffic
-        volumes:
-          - ./configuration/chirpstack-packet-multiplexer:/etc/chirpstack-packet-multiplexer
-        logging:
-          driver: "json-file"
-          options:
-            max-size: "10m"
-            max-file: "3"
-
-      postgres:
-        image: postgres:14-alpine
-        restart: unless-stopped
-        volumes:
-          - ./configuration/postgresql/initdb:/docker-entrypoint-initdb.d
-          - postgresqldata:/var/lib/postgresql/data
-        environment:
-          - POSTGRES_PASSWORD=root
-        logging:
-          driver: "json-file"
-          options:
-            max-size: "10m"
-            max-file: "3"
-
-      redis:
-        image: redis:7-alpine
-        restart: unless-stopped
-        command: redis-server --save 300 1 --save 60 100 --appendonly no --ignore-warnings ARM64-COW-BUG
-        volumes:
-          - redisdata:/data
-        logging:
-          driver: "json-file"
-          options:
-            max-size: "10m"
-            max-file: "3"
-
-      mosquitto:
-        image: eclipse-mosquitto:2
-        restart: unless-stopped
-        ports:
-          - 1883:1883
-        volumes: 
-          - ./configuration/mosquitto/config/:/mosquitto/config/
-        logging:
-          driver: "json-file"
-          options:
-            max-size: "10m"
-            max-file: "3"
-
-    volumes:
-      postgresqldata:
-      redisdata:
-      
-    ```
-3.  新增與設定 chirpstack-packet-multiplexer.toml：
-
-    {% code overflow="wrap" %}
-    ```sh
-    # 新增資料夾
-    mkdir ./configuration/chirpstack-packet-multiplexer
-    # Create chirpstack-packet-multiplexer.toml
-    vi ./configuration/chirpstack-packet-multiplexer/chirpstack-packet-multiplexer.toml
-    ```
-    {% endcode %}
-4.  進入 **插入模式**（按下 `i`），然後貼上以下內容：
-
-    ```toml
-    [logging]
-    level = "info"
-
-    [multiplexer]
-    bind = "0.0.0.0:1700"
-
-    [[multiplexer.server]]
-    server = "chirpstack-gateway-bridge-as923:1700"
-    uplink_only = true # Only forward uplink packets (no downlink)
-
-    # Forward to an additional external server (e.g., remote ChirpStack instance)
-    # [[multiplexer.server]]
-    # server = "remote-server.example.com:1700"
-    # uplink_only = true  # Only forward uplink packets (no downlink)
-
-    # Forward to an additional external server (e.g., TTS instance)
-    [[multiplexer.server]]
-    server = "linxdot.as1.cloud.thethings.industries:1700"
-    uplink_only = false
-    ```
-5. **儲存並退出**（按 `ESC`，輸入 `:wq`，然後按 `Enter`）。
-6.  #### **執行指令以重新啟動 Docker 服務**
-
-    1.  **先停止 Docker 容器**：
-
-        ```sh
-        docker-compose down
-        ```
-    2.  **重新啟動 Docker 容器**：
-
-        ```sh
-        docker-compose up -d
-        ```
-
-    執行這些指令後，系統會自動重新啟動 **ChirpStack LoRaWAN 伺服器**，並應用新的 `docker-compose.yml` 設定。
-7.  現在，您可以使用以下指令來檢查 **日誌文件大小**：
+3.  **執行 ChirpStack 安裝腳本**：
 
     ```sh
-    du -sh /opt/docker/containers/*
+    ./install-chirpstack.sh
+    ```
+4.  **安裝完成後，確認 Docker 容器是否正在運行**：
+
+    ```sh
+    docker ps
     ```
 
-    這將顯示 **Docker 容器目錄**內各個文件夾的大小，幫助您監控 **日誌檔案的使用空間**。
+    如果 **ChirpStack 相關容器** 都在運行，表示安裝成功。
+
+***
+
+### **步驟 2：登入 ChirpStack 管理介面**
+
+1.  **開啟網頁瀏覽器**，輸入以下網址：
+
+    ```sh
+    http://{LinxdotIP}:8080
+    ```
+
+    > **請將 `{LinxdotIP}` 替換為您的 Linxdot HOTSPOT 閘道 IP 地址**
+2. **使用預設帳號登入**：
+   * **使用者名稱**：`admin`
+   * **密碼**：`admin`
+3. **成功登入後，新增一個閘道設備**：
+   * 進入 **ChirpStack 管理介面**
+   * **新增 Gateway**
+   * **系統會產生一組 `gateway_id`**
+   * **請複製該 `gateway_id`，以便稍後進行 LoRaWAN 設定**
+
+<figure><img src="../.gitbook/assets/截圖 2025-02-12 上午11.56.21.png" alt=""><figcaption></figcaption></figure>
+
+***
+
+### **步驟 3：設定 LoRa Packet Forwarder**
+
+1. **開啟終端機（Terminal）**
+2.  **編輯 LoRaWAN 全域設定檔**：
+
+    ```sh
+    vi /etc/lora/global_conf.json.sx1250.AS923
+    ```
+3.  **找到以下行**：
+
+    ```json
+    "gateway_ID": "8888880000000000"
+    ```
+4. **將 `8888880000000000` 替換為剛剛在步驟 2 複製的 `gateway_id`**
+5. **儲存並退出 (`ESC -> :wq -> Enter`)**
+6.  **執行 LoRa Packet Forwarder 安裝腳本**：
+
+    ```sh
+    cd /etc/linxdot-opensource/
+    ./install-lora-pkd-fwd.sh
+    ```
+7. **安裝完成後，回到 ChirpStack 管理介面**，確認 **Gateway 是否已成功連線**。
+
+<figure><img src="../.gitbook/assets/截圖 2025-02-12 中午12.00.40.png" alt=""><figcaption></figcaption></figure>
+
+***
+
+### **最終確認**
+
+#### **成功設定後，您的 Linxdot Hotspot 閘道設備將完全支援 ChirpStack 並提供 LoRaWAN 服務。**
+
+* **確保您的閘道器配置符合網路需求**
+* **透過 ChirpStack 管理介面驗證設備連線狀態**
+
+***
+
+### **進階支援**
+
+如有進一步需求，請參閱 **Linxdot 官方文件** 或 **ChirpStack 官方支援頁面**。

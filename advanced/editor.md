@@ -17,5 +17,5 @@ note. 預設情況下，您可以使用 **root** 作為 **管理者帳號**，�
 1. ### [設定LOG檔案大小](markdown.md)
 2. ### [設定Internal LoRaWAN Gateway Package Forwarder](markdown-1.md)
 3. ### [Linxdot 韌體重刷指南](markdown-2.md)
-4. ### [Linxdot 安裝LoRaWAN服務](markdown-3.md)
+4. ### [Linxdot 安裝LoRaWAN服務](markdown-4.md)
 

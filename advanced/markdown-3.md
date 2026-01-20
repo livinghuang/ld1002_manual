@@ -1,98 +1,141 @@
 ---
+description: Linxdot LD1002 Gateway Recovery Manual
 icon: hand-point-right
 ---
 
-# Linxdot 安裝LoRaWAN服務
+# Linxdot Firmware Reflash Guide
 
-#### **本章將引導您在 Linxdot Hotspot 安裝 LoRaWAN 服務**
 
-如果您 **重新刷機（Reflash）您的 Hotspot**，**LoRaWAN 服務可能不會自動安裝**，因此需要手動重新安裝。請按照以下步驟完成安裝。
 
-#### **安裝與 LoRaWAN 設定指南**
+This document describes how to reflash the Linxdot LD1002 gateway and restore it to factory firmware.
 
 ***
 
-### **步驟 1：安裝 ChirpStack LoRaWAN 服務器**
+### Requirements
 
-1. **開啟終端機（Terminal）**
-2.  **進入 Linxdot 開源工具目錄**：
+#### Hardware
 
-    ```sh
-    cd /etc/linxdot-opensource/
-    ```
-3.  **執行 ChirpStack 安裝腳本**：
+* Linxdot LD1002 Gateway
+* USB cable
+* Windows PC
 
-    ```sh
-    ./install-chirpstack.sh
-    ```
-4.  **安裝完成後，確認 Docker 容器是否正在運行**：
+#### Software
 
-    ```sh
-    docker ps
-    ```
-
-    如果 **ChirpStack 相關容器** 都在運行，表示安裝成功。
+* Factory Tool Installer
+* Latest firmware image
 
 ***
 
-### **步驟 2：登入 ChirpStack 管理介面**
+### Step 1: Install Factory Tool
 
-1.  **開啟網頁瀏覽器**，輸入以下網址：
 
-    ```sh
-    http://{LinxdotIP}:8080
-    ```
 
-    > **請將 `{LinxdotIP}` 替換為您的 Linxdot HOTSPOT 閘道 IP 地址**
-2. **使用預設帳號登入**：
-   * **使用者名稱**：`admin`
-   * **密碼**：`admin`
-3. **成功登入後，新增一個閘道設備**：
-   * 進入 **ChirpStack 管理介面**
-   * **新增 Gateway**
-   * **系統會產生一組 `gateway_id`**
-   * **請複製該 `gateway_id`，以便稍後進行 LoRaWAN 設定**
+Download Factory Tool Installer:
 
-<figure><img src="../.gitbook/assets/截圖 2025-02-12 上午11.56.21.png" alt=""><figcaption></figcaption></figure>
+```
+https://linxdot-opensource.v7idea.com/sdk/Linxdot-Factory-tool-Installer.zip
+```
+
+1. Extract the ZIP file.
+2. Run the installer.
+3. Follow the on-screen instructions to complete installation.
 
 ***
 
-### **步驟 3：設定 LoRa Packet Forwarder**
+### Step 2: Download Latest Firmware
 
-1. **開啟終端機（Terminal）**
-2.  **編輯 LoRaWAN 全域設定檔**：
+Download the latest firmware image:
 
-    ```sh
-    vi /etc/lora/global_conf.json.sx1250.AS923
-    ```
-3.  **找到以下行**：
+```
+https://linxdot-opensource.v7idea.com/images/linxdot-opensource-image-2.0.0.05.tar.gz
+```
 
-    ```json
-    "gateway_ID": "8888880000000000"
-    ```
-4. **將 `8888880000000000` 替換為剛剛在步驟 2 複製的 `gateway_id`**
-5. **儲存並退出 (`ESC -> :wq -> Enter`)**
-6.  **執行 LoRa Packet Forwarder 安裝腳本**：
-
-    ```sh
-    cd /etc/linxdot-opensource/
-    ./install-lora-pkd-fwd.sh
-    ```
-7. **安裝完成後，回到 ChirpStack 管理介面**，確認 **Gateway 是否已成功連線**。
-
-<figure><img src="../.gitbook/assets/截圖 2025-02-12 中午12.00.40.png" alt=""><figcaption></figcaption></figure>
+1. Save the firmware file to your computer.
+2. Verify the file integrity before flashing.
 
 ***
 
-### **最終確認**
+### Step 3: Enter Flash Mode
 
-#### **成功設定後，您的 Linxdot Hotspot 閘道設備將完全支援 ChirpStack 並提供 LoRaWAN 服務。**
+<figure><img src="../.gitbook/assets/spaces_jChpuNugy0MGtBdyBPAd_uploads_git-blob-56b456a7701247512d93ea12783803e0733abf36_btpair.webp" alt=""><figcaption></figcaption></figure>
 
-* **確保您的閘道器配置符合網路需求**
-* **透過 ChirpStack 管理介面驗證設備連線狀態**
+1. Power off the LD1002 gateway.
+2. Locate the BT Repair Key button on the back panel.
+3. Press and hold BT Repair Key.
+4. While holding the button, reconnect power.
+5. Keep holding until the device enters flashing mode.
+6. Factory Tool should now detect the device automatically.
 
 ***
 
-### **進階支援**
+### Step 4: Flash Firmware
 
-如有進一步需求，請參閱 **Linxdot 官方文件** 或 **ChirpStack 官方支援頁面**。
+<figure><img src="../.gitbook/assets/spaces_jChpuNugy0MGtBdyBPAd_uploads_git-blob-3314aaf6e0799fe047586a85e2a656b10e6c263a_hotspotRecoveryTool.png" alt=""><figcaption></figcaption></figure>
+
+1. Open Factory Tool.
+2. Confirm the LD1002 device is detected.
+3. Select the firmware file:
+
+```
+linxdot-opensource-image-2.0.0.05.tar.gz
+```
+
+4. Click Start Flashing.
+5. Wait until the flashing process finishes.
+
+<br>
+
+> ⚠️ Do not disconnect power or USB during flashing.
+
+***
+
+### Step 5: Reboot Device
+
+1. Disconnect the USB cable.
+2. Power cycle the LD1002 gateway.
+3. The device will boot with clean Linxdot firmware.
+
+***
+
+### Post Installation
+
+<br>
+
+After recovery, please continue with:
+
+* Installing ChirpStack on LD1002 to enable LoRaWAN services.
+* Refer to the ChirpStack installation guide for further configuration.
+
+***
+
+### Troubleshooting
+
+#### Factory Tool Cannot Detect Device
+
+* Confirm flashing mode is entered correctly.
+* Check USB cable and USB port.
+* Reinstall Factory Tool and USB drivers.
+
+***
+
+#### Flashing Failed
+
+* Retry flashing process.
+* Re-download firmware file and verify checksum.
+* Ensure stable power and USB connection.
+
+***
+
+### Important Notice
+
+Firmware reflashing will restore the device to factory state.
+
+Backup all configurations before proceeding.
+
+***
+
+### Disclaimer
+
+> ⚠️ Improper flashing may damage the device and may affect warranty.
+
+> Always use official Linxdot tools and firmware images.
